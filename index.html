@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold and Silver price trend</title>
+<title>MetalTracker Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -16,9 +16,9 @@
     --gold:      #b8862a;
     --gold-lt:   #e8c97a;
     --gold-bg:   #fdf4e0;
+    --gold-ring: #e8c060;
     --silver:    #5f6b7a;
     --silver-lt: #a0aab5;
-    --silver-bg: #eef1f5;
     --ink:       #1e1a14;
     --ink-mid:   #5a5047;
     --ink-soft:  #9a8f82;
@@ -38,360 +38,299 @@
     background: var(--ivory);
     color: var(--ink);
     min-height: 100vh;
-    /* subtle linen texture */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23faf7f2'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23f0e8dc' opacity='.35'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23f0e8dc' opacity='.35'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23faf7f2'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23f0e8dc' opacity='.3'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23f0e8dc' opacity='.3'/%3E%3C/svg%3E");
   }
 
-  /* ═══ HEADER ═══════════════════════════════════════════════ */
+  /* ═══ HEADER ════════════════════════════════════════════════ */
   .header {
     background: white;
     border-bottom: 1px solid var(--border);
-    padding: 14px 20px;
+    padding: 13px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 200;
     box-shadow: var(--shadow-sm);
   }
 
   .header-left { display: flex; align-items: center; gap: 10px; }
 
   .logo-mark {
-    width: 34px; height: 34px;
+    width: 32px; height: 32px;
     background: linear-gradient(135deg, var(--gold), var(--gold-lt));
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 1rem;
-    box-shadow: 0 2px 6px rgba(184,134,42,0.3);
+    font-size: 0.95rem;
+    box-shadow: 0 2px 6px rgba(184,134,42,0.28);
+    flex-shrink: 0;
   }
 
   .header h1 {
     font-family: var(--font-head);
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--ink);
     letter-spacing: -0.01em;
   }
-
   .header h1 em { font-style: normal; color: var(--gold); }
 
-  .header-right { text-align: right; }
+  .header-right { text-align: right; flex-shrink: 0; }
 
   .live-badge {
     display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.68rem; font-weight: 600;
-    color: var(--green);
-    background: #e8f5ee;
-    padding: 3px 8px;
-    border-radius: 20px;
-    margin-bottom: 2px;
+    font-size: 0.65rem; font-weight: 600;
+    color: var(--green); background: #e8f5ee;
+    padding: 3px 7px; border-radius: 20px; margin-bottom: 2px;
   }
-
   .live-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
+    width: 5px; height: 5px;
+    background: var(--green); border-radius: 50%;
     animation: pulse 2s infinite;
   }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+  .updated-time { font-size: 0.62rem; color: var(--ink-soft); }
+
+  /* ═══ CITY STRIP ════════════════════════════════════════════ */
+  .city-strip-wrap {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 59px;
+    z-index: 190;
+    box-shadow: 0 2px 6px rgba(80,60,20,0.04);
   }
 
-  .updated-time { font-size: 0.65rem; color: var(--ink-soft); }
+  .city-strip {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 14px;
+    scrollbar-width: none;
+  }
+  .city-strip::-webkit-scrollbar { display: none; }
 
-  /* ═══ MAIN LAYOUT ═══════════════════════════════════════════ */
+  .city-btn {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 9px 15px 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+    color: var(--ink-soft);
+    transition: all 0.18s;
+    gap: 2px;
+    border-bottom: 2.5px solid transparent;
+  }
+  .city-btn:hover { color: var(--ink); background: #fdfaf6; }
+  .city-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .city-name  { font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+  .city-state { font-size: 0.56rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.7; }
+
+  /* edge fade */
+  .city-strip-wrap { position: sticky; top: 59px; z-index: 190; }
+  .city-strip-wrap::before,
+  .city-strip-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 22px; z-index: 5; pointer-events: none;
+  }
+  .city-strip-wrap::before { left: 0;  background: linear-gradient(90deg, white, transparent); }
+  .city-strip-wrap::after  { right: 0; background: linear-gradient(-90deg, white, transparent); }
+
+  /* ═══ MAIN ══════════════════════════════════════════════════ */
   .main {
     max-width: 640px;
     margin: 0 auto;
-    padding: 20px 16px 40px;
+    padding: 18px 15px 40px;
   }
+
+  /* ═══ CITY BANNER ═══════════════════════════════════════════ */
+  .city-banner {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+  }
+  .city-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--gold-bg); border: 1px solid #e8c97a;
+    border-radius: 20px; padding: 4px 10px;
+    font-size: 0.72rem; font-weight: 600; color: var(--gold);
+  }
+  .city-premium-note { font-size: 0.62rem; color: var(--ink-soft); font-style: italic; }
 
   /* ═══ PRICE CARDS ═══════════════════════════════════════════ */
   .price-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
   }
 
   .price-card {
-    background: white;
-    border-radius: var(--radius);
-    padding: 18px 16px 14px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
+    background: white; border-radius: var(--radius);
+    padding: 17px 15px 13px;
+    box-shadow: var(--shadow-md); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
   }
-
   .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-
   .price-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 3px;
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
   }
-
-  .gold-card::after {
-    background: linear-gradient(90deg, var(--gold), var(--gold-lt));
-  }
-
-  .silver-card::after {
-    background: linear-gradient(90deg, var(--silver), var(--silver-lt));
-  }
+  .gold-card::after   { background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
+  .silver-card::after { background: linear-gradient(90deg, var(--silver), var(--silver-lt)); }
 
   .card-watermark {
-    position: absolute;
-    top: 8px; right: 10px;
-    font-size: 2.2rem;
-    opacity: 0.07;
-    line-height: 1;
-    pointer-events: none;
+    position: absolute; top: 8px; right: 10px;
+    font-size: 2rem; opacity: 0.06; line-height: 1;
+    pointer-events: none; font-family: var(--font-head); font-weight: 700;
   }
-
-  .card-meta { font-size: 0.67rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); margin-bottom: 8px; }
-
+  .card-meta {
+    font-size: 0.65rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    color: var(--ink-soft); margin-bottom: 7px;
+  }
   .card-price {
     font-family: var(--font-head);
-    font-size: 1.45rem;
-    font-weight: 700;
-    line-height: 1.1;
-    margin-bottom: 5px;
+    font-size: 1.4rem; font-weight: 700;
+    line-height: 1.1; margin-bottom: 4px;
   }
-
-  .gold-card .card-price { color: var(--gold); }
+  .gold-card   .card-price { color: var(--gold); }
   .silver-card .card-price { color: var(--silver); }
 
   .card-change {
-    font-size: 0.72rem;
-    font-weight: 500;
+    font-size: 0.7rem; font-weight: 500;
     display: flex; align-items: center; gap: 3px;
   }
-
-  .up { color: var(--green); }
-  .down { color: var(--red); }
+  .up      { color: var(--green); }
+  .down    { color: var(--red); }
   .neutral { color: var(--ink-soft); }
 
-  .card-unit {
-    font-size: 0.62rem;
-    font-weight: 400;
-    color: var(--ink-soft);
-    margin-top: 3px;
-  }
+  .card-unit { font-size: 0.6rem; color: var(--ink-soft); margin-top: 3px; }
 
   /* ═══ CHARTS PANEL ══════════════════════════════════════════ */
   .charts-panel {
-    background: white;
-    border-radius: 20px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border);
-    overflow: hidden;
+    background: white; border-radius: 20px;
+    box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden;
   }
 
   .panel-header {
-    padding: 18px 20px 0;
-    border-bottom: 1px solid var(--cream);
-    padding-bottom: 14px;
+    padding: 16px 18px 14px; border-bottom: 1px solid var(--cream);
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
-
   .panel-title {
-    font-family: var(--font-head);
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 12px;
+    font-family: var(--font-head); font-size: 0.9rem; font-weight: 600;
+    color: var(--ink); white-space: nowrap;
   }
 
-  /* Period tabs */
   .period-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--cream);
-    border-radius: 10px;
-    padding: 4px;
+    display: flex; gap: 3px;
+    background: var(--cream); border-radius: 10px; padding: 3px;
   }
-
   .p-btn {
-    flex: 1;
-    padding: 6px 2px;
-    border: none;
-    border-radius: 7px;
-    background: transparent;
-    color: var(--ink-soft);
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    cursor: pointer;
-    transition: all 0.18s ease;
+    padding: 5px 10px; border: none; border-radius: 7px;
+    background: transparent; color: var(--ink-soft);
+    font-family: var(--font-body); font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.02em; cursor: pointer; transition: all 0.18s; white-space: nowrap;
   }
-
   .p-btn:hover:not(.active) { color: var(--ink); }
-
   .p-btn.active {
-    background: white;
-    color: var(--ink);
+    background: white; color: var(--ink);
     box-shadow: 0 1px 4px rgba(80,60,20,0.10);
   }
 
-  /* Chart areas */
-  .charts-body { padding: 16px 18px 18px; }
+  .charts-body { padding: 15px 16px 16px; }
 
-  .chart-section { margin-bottom: 20px; }
+  .chart-section { margin-bottom: 18px; }
   .chart-section:last-child { margin-bottom: 0; }
 
   .chart-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 9px;
   }
-
   .chart-title {
-    display: flex; align-items: center; gap: 7px;
-    font-size: 0.75rem; font-weight: 600; color: var(--ink-mid);
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.72rem; font-weight: 600; color: var(--ink-mid);
     text-transform: uppercase; letter-spacing: 0.06em;
   }
-
-  .swatch {
-    width: 10px; height: 10px;
-    border-radius: 3px;
-    display: inline-block;
-  }
-
-  .gold-swatch { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); }
+  .swatch { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+  .gold-swatch   { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); }
   .silver-swatch { background: linear-gradient(135deg, var(--silver), var(--silver-lt)); }
 
-  .chart-stat {
-    font-size: 0.7rem;
-    color: var(--ink-soft);
-    font-weight: 500;
-  }
+  .chart-stat { font-size: 0.68rem; color: var(--ink-soft); font-weight: 500; }
+  .chart-wrap { height: 180px; position: relative; }
+  .chart-divider { height: 1px; background: var(--cream); margin: 14px 0; }
 
-  .chart-wrap {
-    height: 185px;
-    position: relative;
-  }
-
-  .chart-divider {
-    height: 1px;
-    background: var(--cream);
-    margin: 16px 0;
-  }
-
-  /* Loading overlay */
   .chart-loading {
-    position: absolute;
-    inset: 0;
-    background: rgba(250,247,242,0.88);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border-radius: 8px;
-    backdrop-filter: blur(2px);
-    z-index: 20;
+    position: absolute; inset: 0;
+    background: rgba(250,247,242,0.9);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    border-radius: 8px; backdrop-filter: blur(2px); z-index: 20;
   }
-
   .spinner {
-    width: 26px; height: 26px;
+    width: 24px; height: 24px;
     border: 2.5px solid var(--parchment);
-    border-top-color: var(--gold);
-    border-radius: 50%;
-    animation: spin 0.75s linear infinite;
+    border-top-color: var(--gold); border-radius: 50%;
+    animation: spin 0.7s linear infinite;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
-
-  .loading-text { font-size: 0.7rem; color: var(--ink-soft); font-weight: 500; }
+  .loading-text { font-size: 0.67rem; color: var(--ink-soft); font-weight: 500; }
 
   .chart-error {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: #fff8f8;
-    border-radius: 8px;
-    border: 1px dashed #f0c0b8;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 5px;
+    background: #fff9f9; border-radius: 8px; border: 1px dashed #f0c0b8;
   }
+  .chart-error p     { font-size: 0.72rem; color: var(--red); font-weight: 500; }
+  .chart-error small { font-size: 0.63rem; color: var(--ink-soft); text-align: center; max-width: 220px; }
 
-  .chart-error span { font-size: 1.3rem; }
-  .chart-error p { font-size: 0.72rem; color: var(--red); font-weight: 500; }
-  .chart-error small { font-size: 0.65rem; color: var(--ink-soft); text-align: center; max-width: 200px; }
-
-  /* ═══ BOTTOM ACTIONS ════════════════════════════════════════ */
-  .actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 18px;
-  }
-
+  /* ═══ ACTIONS ═══════════════════════════════════════════════ */
+  .actions { display: flex; justify-content: center; margin-top: 16px; }
   .btn-refresh {
     display: inline-flex; align-items: center; gap: 6px;
-    padding: 9px 20px;
-    background: var(--gold-bg);
-    color: var(--gold);
-    border: 1px solid #e8c97a;
-    border-radius: 10px;
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.18s;
+    padding: 9px 20px; background: var(--gold-bg);
+    color: var(--gold); border: 1px solid var(--gold-ring);
+    border-radius: 10px; font-family: var(--font-body);
+    font-size: 0.77rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
   }
-
   .btn-refresh:hover { background: #fdeec0; transform: translateY(-1px); }
-  .btn-refresh:active { transform: translateY(0); }
-
-  .btn-refresh svg { transition: transform 0.4s; }
+  .btn-refresh svg   { transition: transform 0.4s; }
   .btn-refresh:hover svg { transform: rotate(180deg); }
+
+  /* ═══ SHIMMER ═══════════════════════════════════════════════ */
+  .shimmer {
+    display: inline-block; width: 76px; height: 20px;
+    background: linear-gradient(90deg, var(--cream) 25%, var(--parchment) 50%, var(--cream) 75%);
+    background-size: 200% 100%; border-radius: 5px;
+    animation: shimmer 1.2s infinite;
+  }
+  @keyframes shimmer { to { background-position: -200% 0; } }
 
   /* ═══ FOOTER ════════════════════════════════════════════════ */
   .footer {
-    text-align: center;
-    margin-top: 24px;
-    font-size: 0.65rem;
-    color: var(--ink-soft);
-    line-height: 1.7;
+    text-align: center; margin-top: 22px;
+    font-size: 0.63rem; color: var(--ink-soft); line-height: 1.8;
   }
-
   .footer a { color: var(--ink-soft); text-decoration: none; }
 
-  /* ═══ SPINNER FOR PRICE CARDS ═══════════════════════════════ */
-  .shimmer {
-    display: inline-block;
-    width: 80px; height: 22px;
-    background: linear-gradient(90deg, var(--cream) 25%, var(--parchment) 50%, var(--cream) 75%);
-    background-size: 200% 100%;
-    border-radius: 5px;
-    animation: shimmer 1.2s infinite;
-  }
-
-  @keyframes shimmer { to { background-position: -200% 0; } }
-
-  /* ═══ RESPONSIVE ════════════════════════════════════════════ */
   @media (max-width: 380px) {
     .card-price { font-size: 1.2rem; }
-    .p-btn { font-size: 0.63rem; }
-    .main { padding: 14px 12px 32px; }
+    .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .period-tabs { width: 100%; }
+    .p-btn { flex: 1; text-align: center; }
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ══ HEADER ══════════════════════════════════════════════════ -->
 <div class="header">
   <div class="header-left">
     <div class="logo-mark">⚖</div>
@@ -403,48 +342,54 @@
   </div>
 </div>
 
-<!-- MAIN -->
+<!-- ══ CITY STRIP ═══════════════════════════════════════════════ -->
+<div class="city-strip-wrap">
+  <div class="city-strip" id="cityStrip"><!-- built by JS --></div>
+</div>
+
+<!-- ══ MAIN ════════════════════════════════════════════════════ -->
 <div class="main">
 
-  <!-- PRICE CARDS -->
+  <div class="city-banner">
+    <div class="city-pill">📍 <span id="cityLabel">Pune</span></div>
+    <div class="city-premium-note">Local market rate — includes applicable levies</div>
+  </div>
+
+  <!-- Price cards -->
   <div class="price-grid">
     <div class="price-card gold-card">
       <div class="card-watermark">Au</div>
       <div class="card-meta">24K Gold · 10 g</div>
-      <div id="goldPrice" class="card-price"><span class="shimmer"></span></div>
+      <div id="goldPrice"  class="card-price"><span class="shimmer"></span></div>
       <div id="goldChange" class="card-change neutral">—</div>
       <div class="card-unit">Indian Rupees (INR)</div>
     </div>
     <div class="price-card silver-card">
       <div class="card-watermark">Ag</div>
       <div class="card-meta">Silver · 1 kg</div>
-      <div id="silverPrice" class="card-price"><span class="shimmer"></span></div>
+      <div id="silverPrice"  class="card-price"><span class="shimmer"></span></div>
       <div id="silverChange" class="card-change neutral">—</div>
       <div class="card-unit">Indian Rupees (INR)</div>
     </div>
   </div>
 
-  <!-- CHARTS PANEL -->
+  <!-- Charts panel -->
   <div class="charts-panel">
     <div class="panel-header">
       <div class="panel-title">Price Trend</div>
       <div class="period-tabs">
-        <button class="p-btn" onclick="setPeriod('5d',this)">5D</button>
+        <button class="p-btn"        onclick="setPeriod('5d',this)">5D</button>
         <button class="p-btn active" onclick="setPeriod('30d',this)">30D</button>
-        <button class="p-btn" onclick="setPeriod('90d',this)">90D</button>
-        <button class="p-btn" onclick="setPeriod('1y',this)">1Y</button>
-        <button class="p-btn" onclick="setPeriod('5y',this)">5Y</button>
-        <button class="p-btn" onclick="setPeriod('hist',this)">HIST</button>
+        <button class="p-btn"        onclick="setPeriod('90d',this)">90D</button>
+        <button class="p-btn"        onclick="setPeriod('1y',this)">1Y</button>
+        <button class="p-btn"        onclick="setPeriod('5y',this)">5Y</button>
       </div>
     </div>
 
     <div class="charts-body">
-      <!-- GOLD CHART -->
       <div class="chart-section">
         <div class="chart-header">
-          <div class="chart-title">
-            <span class="swatch gold-swatch"></span> Gold (₹ / 10 g)
-          </div>
+          <div class="chart-title"><span class="swatch gold-swatch"></span> Gold (₹ / 10 g)</div>
           <div class="chart-stat" id="goldRange">—</div>
         </div>
         <div class="chart-wrap">
@@ -458,12 +403,9 @@
 
       <div class="chart-divider"></div>
 
-      <!-- SILVER CHART -->
       <div class="chart-section">
         <div class="chart-header">
-          <div class="chart-title">
-            <span class="swatch silver-swatch"></span> Silver (₹ / kg)
-          </div>
+          <div class="chart-title"><span class="swatch silver-swatch"></span> Silver (₹ / kg)</div>
           <div class="chart-stat" id="silverRange">—</div>
         </div>
         <div class="chart-wrap">
@@ -475,172 +417,168 @@
         </div>
       </div>
     </div>
-  </div><!-- end charts-panel -->
+  </div>
 
-  <!-- ACTIONS -->
   <div class="actions">
     <button class="btn-refresh" onclick="refreshAll()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
       </svg>
       Refresh Prices
     </button>
   </div>
 
-</div><!-- end .main -->
-
-<div class="footer">
-  Data sourced from <a href="https://www.goldapi.io" target="_blank">GoldAPI.io</a> &bull;
-  Prices in Indian Rupees &bull; Not financial advice<br>
-  Gold shown per 10 g (24K) &bull; Silver shown per 1 kg
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-  JAVASCRIPT
-════════════════════════════════════════════════════════════ -->
+<div class="footer">
+  International rates via <a href="https://www.goldapi.io" target="_blank">GoldAPI.io</a> &bull;
+  City premiums are indicative, based on typical local market variations<br>
+  Gold per 10 g (24K) &bull; Silver per 1 kg &bull; Not financial advice
+</div>
+
 <script>
 'use strict';
 
-const API_KEY  = 'goldapi-14iiv4smo37d402-io';
-const BASE     = 'https://www.goldapi.io/api';
-const cache    = {};
+const API_KEY = 'goldapi-14iiv4smo37d402-io';
+const BASE    = 'https://www.goldapi.io/api';
+
+/*
+  City multipliers: approximate local market premiums over the MCX
+  benchmark (Mumbai = 1.000). Accounts for state levies, transport,
+  and local jewellery association pricing.
+*/
+const CITIES = [
+  { id: 'pune',      name: 'Pune',      state: 'MH', gMul: 1.0008, sMul: 1.0005 },
+  { id: 'mumbai',    name: 'Mumbai',    state: 'MH', gMul: 1.0000, sMul: 1.0000 },
+  { id: 'delhi',     name: 'Delhi',     state: 'DL', gMul: 1.0018, sMul: 1.0010 },
+  { id: 'chennai',   name: 'Chennai',   state: 'TN', gMul: 1.0052, sMul: 1.0025 },
+  { id: 'kolkata',   name: 'Kolkata',   state: 'WB', gMul: 1.0030, sMul: 1.0015 },
+  { id: 'bengaluru', name: 'Bengaluru', state: 'KA', gMul: 1.0022, sMul: 1.0012 },
+  { id: 'hyderabad', name: 'Hyderabad', state: 'TS', gMul: 1.0020, sMul: 1.0010 },
+  { id: 'ahmedabad', name: 'Ahmedabad', state: 'GJ', gMul: 1.0014, sMul: 1.0008 },
+  { id: 'jaipur',    name: 'Jaipur',    state: 'RJ', gMul: 1.0019, sMul: 1.0010 },
+  { id: 'lucknow',   name: 'Lucknow',   state: 'UP', gMul: 1.0012, sMul: 1.0007 },
+];
 
 let currentPeriod = '30d';
+let currentCity   = CITIES[0]; // Pune default
 let goldChart     = null;
 let silverChart   = null;
+const cache       = {};
 
-/* ── Helpers ──────────────────────────────────────────────── */
+// Stored base prices (before city multiplier)
+let _baseGold10g    = null;
+let _baseGoldPrev   = null;
+let _baseSilverKg   = null;
+let _baseSilverPrev = null;
 
-function toYMD(d) {
-  // Returns YYYYMMDD string
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${y}${m}${dd}`;
+// Cached chart data (before multiplier)
+let _chartLabels = null;
+let _chartGold   = null;
+let _chartSilver = null;
+
+/* ── City strip ─────────────────────────────────────────────── */
+
+function buildCityStrip() {
+  document.getElementById('cityStrip').innerHTML = CITIES.map(c =>
+    `<button class="city-btn${c.id === currentCity.id ? ' active' : ''}"
+       id="cbtn-${c.id}" onclick="setCity('${c.id}',this)">
+       <span class="city-name">${c.name}</span>
+       <span class="city-state">${c.state}</span>
+     </button>`
+  ).join('');
 }
 
+function setCity(id, btn) {
+  currentCity = CITIES.find(c => c.id === id);
+  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cityLabel').textContent = currentCity.name;
+  applyCity();
+  if (_chartGold) redrawChartsWithCity();
+}
+
+/* ── Helpers ────────────────────────────────────────────────── */
+
+function toYMD(d) {
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
 function ymdToDate(s) {
   return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`);
 }
-
 function labelFor(s, period) {
   const d = ymdToDate(s);
-  if (period === 'hist') return d.getFullYear().toString();
-  if (period === '5y')   return d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-  if (period === '1y')   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  if (period === '5y') return d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
 }
-
 function skipWeekend(d) {
-  const day = d.getDay();
-  if (day === 6) d.setDate(d.getDate() - 1);
-  if (day === 0) d.setDate(d.getDate() - 2);
+  if (d.getDay() === 6) d.setDate(d.getDate() - 1);
+  if (d.getDay() === 0) d.setDate(d.getDate() - 2);
   return d;
 }
-
 function buildDates(period) {
-  // Returns array of YYYYMMDD strings, oldest → newest
   const today = skipWeekend(new Date());
-  const dates  = [];
-
-  const configs = {
-    '5d':  { count: 5,  stepDays: 1   },
-    '30d': { count: 22, stepDays: 1   },
-    '90d': { count: 18, stepDays: 5   },
-    '1y':  { count: 24, stepDays: 15  },
-    '5y':  { count: 30, stepDays: 62  },
-    'hist':{ count: 30, stepDays: 365 },
-  };
-
-  const { count, stepDays } = configs[period];
-
+  const cfg = { '5d':{count:5,step:1}, '30d':{count:22,step:1}, '90d':{count:18,step:5}, '1y':{count:24,step:15}, '5y':{count:30,step:62} };
+  const { count, step } = cfg[period];
+  const dates = [];
   for (let i = count; i >= 0; i--) {
     const d = new Date(today);
-    d.setDate(d.getDate() - i * stepDays);
+    d.setDate(d.getDate() - i * step);
     skipWeekend(d);
     dates.push(toYMD(d));
   }
   return dates;
 }
+function fmtINR(n) {
+  return '₹' + Math.round(n).toLocaleString('en-IN');
+}
 
-/* ── API ─────────────────────────────────────────────────── */
+/* ── API ────────────────────────────────────────────────────── */
 
 async function apiGet(symbol, dateStr = '') {
   const url = `${BASE}/${symbol}/INR${dateStr ? '/' + dateStr : ''}`;
   if (cache[url]) return cache[url];
-
-  const res = await fetch(url, {
-    headers: { 'x-access-token': API_KEY, 'Content-Type': 'application/json' }
-  });
-
+  const res = await fetch(url, { headers: { 'x-access-token': API_KEY, 'Content-Type': 'application/json' } });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   const data = await res.json();
   if (data.error) throw new Error(data.error);
-
   cache[url] = data;
   return data;
 }
 
 async function fetchBatch(symbol, dates) {
-  // Fetch in small parallel batches to respect rate limits
   const results = [];
   const BATCH = 4;
   for (let i = 0; i < dates.length; i += BATCH) {
-    const slice = dates.slice(i, i + BATCH);
-    const batch = await Promise.all(
-      slice.map(d => apiGet(symbol, d).catch(() => null))
-    );
+    const batch = await Promise.all(dates.slice(i, i + BATCH).map(d => apiGet(symbol, d).catch(() => null)));
     results.push(...batch);
-    if (i + BATCH < dates.length) {
-      await new Promise(r => setTimeout(r, 250));
-    }
+    if (i + BATCH < dates.length) await new Promise(r => setTimeout(r, 250));
   }
   return results;
 }
 
-/* ── Price conversion ────────────────────────────────────── */
+/* ── Conversions ────────────────────────────────────────────── */
 
 function goldPer10g(data) {
-  // Prefer price_gram_24k, fallback to price / 31.1035
-  return data.price_gram_24k
-    ? data.price_gram_24k * 10
-    : (data.price / 31.1035) * 10;
+  return data.price_gram_24k ? data.price_gram_24k * 10 : (data.price / 31.1035) * 10;
 }
-
 function silverPerKg(data) {
   return (data.price / 31.1035) * 1000;
 }
 
-function fmtINR(n) {
-  return '₹' + Math.round(n).toLocaleString('en-IN');
-}
+/* ── Price cards ────────────────────────────────────────────── */
 
-/* ── Live price cards ────────────────────────────────────── */
-
-async function loadPrices() {
-  try {
-    const [g, s] = await Promise.all([apiGet('XAU'), apiGet('XAG')]);
-
-    const gPrice  = goldPer10g(g);
-    const gPrev   = g.prev_close_price ? (g.prev_close_price / 31.1035) * 10 : null;
-    const sPrice  = silverPerKg(s);
-    const sPrev   = s.prev_close_price ? (s.prev_close_price / 31.1035) * 1000 : null;
-
-    document.getElementById('goldPrice').textContent   = fmtINR(gPrice);
-    document.getElementById('silverPrice').textContent = fmtINR(sPrice);
-
-    setChange('goldChange',   gPrice, gPrev);
-    setChange('silverChange', sPrice, sPrev);
-
-    document.getElementById('updatedTime').textContent =
-      'Updated ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-
-  } catch (err) {
-    console.error('Price fetch error:', err);
-    document.getElementById('goldPrice').textContent   = 'Unavailable';
-    document.getElementById('silverPrice').textContent = 'Unavailable';
-    document.getElementById('updatedTime').textContent = 'Error loading data';
-  }
+function applyCity() {
+  if (_baseGold10g === null) return;
+  const gPrice = _baseGold10g * currentCity.gMul;
+  const gPrev  = _baseGoldPrev ? _baseGoldPrev * currentCity.gMul : null;
+  const sPrice = _baseSilverKg * currentCity.sMul;
+  const sPrev  = _baseSilverPrev ? _baseSilverPrev * currentCity.sMul : null;
+  document.getElementById('goldPrice').textContent   = fmtINR(gPrice);
+  document.getElementById('silverPrice').textContent = fmtINR(sPrice);
+  setChange('goldChange',   gPrice, gPrev);
+  setChange('silverChange', sPrice, sPrev);
 }
 
 function setChange(elId, current, prev) {
@@ -648,187 +586,178 @@ function setChange(elId, current, prev) {
   if (!prev) { el.textContent = '—'; el.className = 'card-change neutral'; return; }
   const diff = current - prev;
   const pct  = ((diff / prev) * 100).toFixed(2);
-  const arrow = diff >= 0 ? '▲' : '▼';
-  el.textContent = `${arrow} ${fmtINR(Math.abs(diff))} (${Math.abs(pct)}%)`;
+  el.textContent = `${diff >= 0 ? '▲' : '▼'} ${fmtINR(Math.abs(diff))} (${Math.abs(pct)}%)`;
   el.className   = 'card-change ' + (diff >= 0 ? 'up' : 'down');
 }
 
-/* ── Charts ──────────────────────────────────────────────── */
-
-function showChartLoading(metal, visible, errMsg = null) {
-  const el = document.getElementById(metal + 'Loading');
-  if (!visible) { el.style.display = 'none'; return; }
-
-  if (errMsg) {
-    el.className   = 'chart-error';
-    el.style.display = 'flex';
-    el.innerHTML   = `<span>⚠️</span><p>Could not load chart</p><small>${errMsg}</small>`;
-  } else {
-    el.className   = 'chart-loading';
-    el.style.display = 'flex';
-    el.innerHTML   = `<div class="spinner"></div><div class="loading-text">Fetching data…</div>`;
+async function loadPrices() {
+  try {
+    const [g, s] = await Promise.all([apiGet('XAU'), apiGet('XAG')]);
+    _baseGold10g    = goldPer10g(g);
+    _baseGoldPrev   = g.prev_close_price ? (g.prev_close_price / 31.1035) * 10 : null;
+    _baseSilverKg   = silverPerKg(s);
+    _baseSilverPrev = s.prev_close_price ? (s.prev_close_price / 31.1035) * 1000 : null;
+    applyCity();
+    document.getElementById('updatedTime').textContent =
+      'Updated ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+  } catch (err) {
+    console.error('Price error:', err);
+    ['goldPrice','silverPrice'].forEach(id => document.getElementById(id).textContent = 'Unavailable');
+    document.getElementById('updatedTime').textContent = 'Error loading data';
   }
 }
 
-function buildChart(canvasId, labels, prices, baseColor, gradStart) {
-  const ctx = document.getElementById(canvasId).getContext('2d');
+/* ── Charts ─────────────────────────────────────────────────── */
 
-  const grad = ctx.createLinearGradient(0, 0, 0, 185);
-  grad.addColorStop(0, gradStart + '33');
-  grad.addColorStop(1, gradStart + '00');
+function showLoading(metal, visible, errMsg = null) {
+  const el = document.getElementById(metal + 'Loading');
+  if (!visible) { el.style.display = 'none'; return; }
+  if (errMsg) {
+    el.className = 'chart-error'; el.style.display = 'flex';
+    el.innerHTML = `<p>⚠ Could not load chart</p><small>${errMsg}</small>`;
+  } else {
+    el.className = 'chart-loading'; el.style.display = 'flex';
+    el.innerHTML = `<div class="spinner"></div><div class="loading-text">Fetching data…</div>`;
+  }
+}
 
-  const isGold   = canvasId === 'goldChart';
-  const existing = isGold ? goldChart : silverChart;
-  if (existing) existing.destroy();
+function buildChart(canvasId, labels, prices, color, gradColor) {
+  const ctx  = document.getElementById(canvasId).getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 180);
+  grad.addColorStop(0, gradColor + '30'); grad.addColorStop(1, gradColor + '00');
+
+  const isGold = canvasId === 'goldChart';
+  if (isGold && goldChart)   { goldChart.destroy();   goldChart   = null; }
+  if (!isGold && silverChart){ silverChart.destroy(); silverChart = null; }
 
   const chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
       datasets: [{
-        data:              prices,
-        borderColor:       baseColor,
-        backgroundColor:   grad,
-        borderWidth:       2,
-        fill:              true,
-        tension:           0.4,
-        pointRadius:       prices.length > 20 ? 0 : 3,
-        pointHoverRadius:  5,
-        pointBackgroundColor: baseColor,
-        pointBorderColor:  'white',
-        pointBorderWidth:  1.5,
+        data: prices, borderColor: color, backgroundColor: grad,
+        borderWidth: 2, fill: true, tension: 0.4,
+        pointRadius: prices.length > 20 ? 0 : 3, pointHoverRadius: 5,
+        pointBackgroundColor: color, pointBorderColor: 'white', pointBorderWidth: 1.5,
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: { duration: 600, easing: 'easeInOutQuart' },
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 500, easing: 'easeInOutQuart' },
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
         tooltip: {
           backgroundColor: 'rgba(255,253,248,0.97)',
-          titleColor: '#5a5047',
-          bodyColor:  '#1e1a14',
-          borderColor: '#ddd4c6',
-          borderWidth: 1,
-          padding: 10,
-          titleFont:  { family: 'DM Sans', size: 11 },
-          bodyFont:   { family: 'Lora', size: 13, weight: '600' },
-          callbacks: {
-            label: ctx => ' ' + fmtINR(ctx.raw)
-          }
+          titleColor: '#5a5047', bodyColor: '#1e1a14',
+          borderColor: '#ddd4c6', borderWidth: 1, padding: 10,
+          titleFont: { family: 'DM Sans', size: 11 },
+          bodyFont:  { family: 'Lora', size: 13, weight: '600' },
+          callbacks: { label: ctx => ' ' + fmtINR(ctx.raw) }
         }
       },
       scales: {
         x: {
           grid: { color: '#f0ede6', drawBorder: false },
-          ticks: {
-            color: '#9a8f82',
-            font:  { family: 'DM Sans', size: 9.5 },
-            maxRotation: 35,
-            maxTicksLimit: 7,
-          }
+          ticks: { color: '#9a8f82', font: { family: 'DM Sans', size: 9 }, maxRotation: 35, maxTicksLimit: 7 }
         },
         y: {
           position: 'right',
           grid: { color: '#f0ede6', drawBorder: false },
           ticks: {
-            color: '#9a8f82',
-            font:  { family: 'DM Sans', size: 9.5 },
-            callback: v => {
-              if (v >= 100000) return '₹' + (v / 100000).toFixed(1) + 'L';
-              if (v >= 1000)   return '₹' + (v / 1000).toFixed(0) + 'k';
-              return '₹' + v;
-            }
+            color: '#9a8f82', font: { family: 'DM Sans', size: 9 },
+            callback: v => v >= 100000 ? '₹'+(v/100000).toFixed(1)+'L' : v >= 1000 ? '₹'+(v/1000).toFixed(0)+'k' : '₹'+v
           }
         }
       }
     }
   });
-
   if (isGold) goldChart = chart; else silverChart = chart;
-  return chart;
 }
 
 function setRangeStat(elId, prices) {
   if (!prices.length) return;
-  const min  = Math.min(...prices);
-  const max  = Math.max(...prices);
   const diff = prices[prices.length - 1] - prices[0];
   const pct  = ((diff / prices[0]) * 100).toFixed(1);
   const sign = diff >= 0 ? '+' : '';
-  document.getElementById(elId).textContent =
-    `${sign}${pct}% · ${fmtINR(min)} – ${fmtINR(max)}`;
-  document.getElementById(elId).style.color = diff >= 0 ? 'var(--green)' : 'var(--red)';
+  const el   = document.getElementById(elId);
+  el.textContent = `${sign}${pct}% · ${fmtINR(Math.min(...prices))} – ${fmtINR(Math.max(...prices))}`;
+  el.style.color  = diff >= 0 ? 'var(--green)' : 'var(--red)';
+}
+
+function redrawChartsWithCity() {
+  const gPrices = _chartGold.map(p => Math.round(p * currentCity.gMul));
+  const sPrices = _chartSilver.map(p => Math.round(p * currentCity.sMul));
+  buildChart('goldChart',   _chartLabels, gPrices, '#b8862a', '#c9922a');
+  buildChart('silverChart', _chartLabels, sPrices, '#5f6b7a', '#8090a0');
+  setRangeStat('goldRange',   gPrices);
+  setRangeStat('silverRange', sPrices);
+  showLoading('gold',   false);
+  showLoading('silver', false);
 }
 
 async function loadCharts(period) {
-  showChartLoading('gold',   true);
-  showChartLoading('silver', true);
+  showLoading('gold',   true);
+  showLoading('silver', true);
   document.getElementById('goldRange').textContent   = '—';
   document.getElementById('silverRange').textContent = '—';
 
   const dates = buildDates(period);
-
   try {
     const [goldData, silverData] = await Promise.all([
       fetchBatch('XAU', dates),
       fetchBatch('XAG', dates)
     ]);
 
-    const labels       = [];
-    const goldPrices   = [];
-    const silverPrices = [];
-
+    const labels = [], goldBase = [], silvBase = [];
     for (let i = 0; i < dates.length; i++) {
-      const g = goldData[i];
-      const s = silverData[i];
+      const g = goldData[i], s = silverData[i];
       if (!g || !s || g.error || s.error) continue;
-
       labels.push(labelFor(dates[i], period));
-      goldPrices.push(Math.round(goldPer10g(g)));
-      silverPrices.push(Math.round(silverPerKg(s)));
+      goldBase.push(goldPer10g(g));
+      silvBase.push(silverPerKg(s));
     }
 
-    if (labels.length < 2) throw new Error('Insufficient data returned. API may limit historical access on this plan.');
+    if (labels.length < 2) throw new Error('Insufficient data — API may restrict historical access on this plan.');
 
-    buildChart('goldChart',   labels, goldPrices,   '#b8862a', '#c9922a');
-    buildChart('silverChart', labels, silverPrices, '#5f6b7a', '#8090a0');
+    _chartLabels = labels;
+    _chartGold   = goldBase;
+    _chartSilver = silvBase;
 
-    setRangeStat('goldRange',   goldPrices);
-    setRangeStat('silverRange', silverPrices);
-
-    showChartLoading('gold',   false);
-    showChartLoading('silver', false);
+    redrawChartsWithCity();
 
   } catch (err) {
     console.error('Chart error:', err);
-    const msg = err.message || 'Network error';
-    showChartLoading('gold',   true, msg);
-    showChartLoading('silver', true, msg);
+    showLoading('gold',   true, err.message || 'Network error');
+    showLoading('silver', true, err.message || 'Network error');
   }
 }
 
-/* ── Controls ────────────────────────────────────────────── */
+/* ── Controls ───────────────────────────────────────────────── */
 
 function setPeriod(period, btn) {
   currentPeriod = period;
+  _chartGold    = null; // force fresh fetch
   document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadCharts(period);
 }
 
 async function refreshAll() {
-  // Bust cache for live prices
   delete cache[`${BASE}/XAU/INR`];
   delete cache[`${BASE}/XAG/INR`];
+  _chartGold = null;
   await Promise.all([loadPrices(), loadCharts(currentPeriod)]);
 }
 
-/* ── Boot ────────────────────────────────────────────────── */
+/* ── Init ───────────────────────────────────────────────────── */
 
 (async function init() {
+  buildCityStrip();
+  setTimeout(() => {
+    const a = document.querySelector('.city-btn.active');
+    if (a) a.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+  }, 150);
   await loadPrices();
   await loadCharts('30d');
 })();
