@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold and Silver price trend</title>
+<title>Gold and Silver Price Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
@@ -45,7 +45,7 @@
   .header {
     background: white;
     border-bottom: 1px solid var(--border);
-    padding: 13px 18px;
+    padding: 12px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -67,14 +67,24 @@
     flex-shrink: 0;
   }
 
+  .header-titles { display: flex; flex-direction: column; gap: 1px; }
+
   .header h1 {
     font-family: var(--font-head);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--ink);
     letter-spacing: -0.01em;
+    line-height: 1.2;
   }
   .header h1 em { font-style: normal; color: var(--gold); }
+  .header-sub {
+    font-size: 0.58rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
 
   .header-right { text-align: right; flex-shrink: 0; }
 
@@ -90,70 +100,49 @@
     animation: pulse 2s infinite;
   }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
-
-  .updated-time { font-size: 0.62rem; color: var(--ink-soft); }
+  .updated-time { font-size: 0.6rem; color: var(--ink-soft); }
 
   /* ═══ CITY STRIP ════════════════════════════════════════════ */
   .city-strip-wrap {
     background: white;
     border-bottom: 1px solid var(--border);
     position: sticky;
-    top: 59px;
+    top: 57px;
     z-index: 190;
     box-shadow: 0 2px 6px rgba(80,60,20,0.04);
   }
-
   .city-strip {
     display: flex;
     overflow-x: auto;
-    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     padding: 0 14px;
     scrollbar-width: none;
   }
   .city-strip::-webkit-scrollbar { display: none; }
-
   .city-btn {
     flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 9px 15px 8px;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-family: var(--font-body);
-    color: var(--ink-soft);
-    transition: all 0.18s;
-    gap: 2px;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 9px 14px 8px;
+    border: none; background: transparent;
+    cursor: pointer; font-family: var(--font-body);
+    color: var(--ink-soft); transition: all 0.18s; gap: 2px;
     border-bottom: 2.5px solid transparent;
   }
   .city-btn:hover { color: var(--ink); background: #fdfaf6; }
   .city-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-
   .city-name  { font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
   .city-state { font-size: 0.56rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.7; }
-
-  /* edge fade */
-  .city-strip-wrap { position: sticky; top: 59px; z-index: 190; }
-  .city-strip-wrap::before,
-  .city-strip-wrap::after {
-    content: ''; position: absolute; top: 0; bottom: 0; width: 22px; z-index: 5; pointer-events: none;
+  .city-strip-wrap::before, .city-strip-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 20px; z-index: 5; pointer-events: none;
   }
   .city-strip-wrap::before { left: 0;  background: linear-gradient(90deg, white, transparent); }
   .city-strip-wrap::after  { right: 0; background: linear-gradient(-90deg, white, transparent); }
 
   /* ═══ MAIN ══════════════════════════════════════════════════ */
-  .main {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 18px 15px 40px;
-  }
+  .main { max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
 
   /* ═══ CITY BANNER ═══════════════════════════════════════════ */
-  .city-banner {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
-  }
+  .city-banner { display: flex; align-items: center; gap: 8px; margin-bottom: 13px; }
   .city-pill {
     display: inline-flex; align-items: center; gap: 5px;
     background: var(--gold-bg); border: 1px solid #e8c97a;
@@ -163,118 +152,93 @@
   .city-premium-note { font-size: 0.62rem; color: var(--ink-soft); font-style: italic; }
 
   /* ═══ PRICE CARDS ═══════════════════════════════════════════ */
-  .price-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 18px;
-  }
-
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   .price-card {
     background: white; border-radius: var(--radius);
-    padding: 17px 15px 13px;
+    padding: 16px 14px 12px;
     box-shadow: var(--shadow-md); border: 1px solid var(--border);
     position: relative; overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
   .price-card::after {
-    content: ''; position: absolute;
-    bottom: 0; left: 0; right: 0; height: 3px;
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
   }
   .gold-card::after   { background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
   .silver-card::after { background: linear-gradient(90deg, var(--silver), var(--silver-lt)); }
-
   .card-watermark {
     position: absolute; top: 8px; right: 10px;
     font-size: 2rem; opacity: 0.06; line-height: 1;
     pointer-events: none; font-family: var(--font-head); font-weight: 700;
   }
   .card-meta {
-    font-size: 0.65rem; font-weight: 600;
+    font-size: 0.64rem; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.07em;
-    color: var(--ink-soft); margin-bottom: 7px;
+    color: var(--ink-soft); margin-bottom: 6px;
   }
   .card-price {
-    font-family: var(--font-head);
-    font-size: 1.4rem; font-weight: 700;
+    font-family: var(--font-head); font-size: 1.35rem; font-weight: 700;
     line-height: 1.1; margin-bottom: 4px;
   }
   .gold-card   .card-price { color: var(--gold); }
   .silver-card .card-price { color: var(--silver); }
-
-  .card-change {
-    font-size: 0.7rem; font-weight: 500;
-    display: flex; align-items: center; gap: 3px;
-  }
+  .card-change { font-size: 0.69rem; font-weight: 500; display: flex; align-items: center; gap: 3px; }
   .up      { color: var(--green); }
   .down    { color: var(--red); }
   .neutral { color: var(--ink-soft); }
-
-  .card-unit { font-size: 0.6rem; color: var(--ink-soft); margin-top: 3px; }
+  .card-unit { font-size: 0.59rem; color: var(--ink-soft); margin-top: 3px; }
 
   /* ═══ CHARTS PANEL ══════════════════════════════════════════ */
   .charts-panel {
     background: white; border-radius: 20px;
     box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden;
   }
-
   .panel-header {
-    padding: 16px 18px 14px; border-bottom: 1px solid var(--cream);
+    padding: 15px 17px 13px; border-bottom: 1px solid var(--cream);
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
   .panel-title {
-    font-family: var(--font-head); font-size: 0.9rem; font-weight: 600;
+    font-family: var(--font-head); font-size: 0.88rem; font-weight: 600;
     color: var(--ink); white-space: nowrap;
   }
-
   .period-tabs {
     display: flex; gap: 3px;
     background: var(--cream); border-radius: 10px; padding: 3px;
   }
   .p-btn {
-    padding: 5px 10px; border: none; border-radius: 7px;
+    padding: 5px 9px; border: none; border-radius: 7px;
     background: transparent; color: var(--ink-soft);
-    font-family: var(--font-body); font-size: 0.68rem; font-weight: 600;
+    font-family: var(--font-body); font-size: 0.67rem; font-weight: 600;
     letter-spacing: 0.02em; cursor: pointer; transition: all 0.18s; white-space: nowrap;
   }
   .p-btn:hover:not(.active) { color: var(--ink); }
-  .p-btn.active {
-    background: white; color: var(--ink);
-    box-shadow: 0 1px 4px rgba(80,60,20,0.10);
-  }
-
-  .charts-body { padding: 15px 16px 16px; }
-
-  .chart-section { margin-bottom: 18px; }
+  .p-btn.active { background: white; color: var(--ink); box-shadow: 0 1px 4px rgba(80,60,20,0.10); }
+  .charts-body { padding: 14px 15px 15px; }
+  .chart-section { margin-bottom: 17px; }
   .chart-section:last-child { margin-bottom: 0; }
-
-  .chart-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 9px;
-  }
+  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
   .chart-title {
     display: flex; align-items: center; gap: 6px;
-    font-size: 0.72rem; font-weight: 600; color: var(--ink-mid);
+    font-size: 0.71rem; font-weight: 600; color: var(--ink-mid);
     text-transform: uppercase; letter-spacing: 0.06em;
   }
   .swatch { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
   .gold-swatch   { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); }
   .silver-swatch { background: linear-gradient(135deg, var(--silver), var(--silver-lt)); }
+  .chart-stat { font-size: 0.67rem; color: var(--ink-soft); font-weight: 500; }
+  .chart-wrap { height: 178px; position: relative; }
+  .chart-divider { height: 1px; background: var(--cream); margin: 13px 0; }
 
-  .chart-stat { font-size: 0.68rem; color: var(--ink-soft); font-weight: 500; }
-  .chart-wrap { height: 180px; position: relative; }
-  .chart-divider { height: 1px; background: var(--cream); margin: 14px 0; }
-
+  /* Loading / error overlays */
   .chart-loading {
     position: absolute; inset: 0;
-    background: rgba(250,247,242,0.9);
+    background: rgba(250,247,242,0.92);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 8px;
     border-radius: 8px; backdrop-filter: blur(2px); z-index: 20;
   }
   .spinner {
-    width: 24px; height: 24px;
+    width: 22px; height: 22px;
     border: 2.5px solid var(--parchment);
     border-top-color: var(--gold); border-radius: 50%;
     animation: spin 0.7s linear infinite;
@@ -289,20 +253,32 @@
     background: #fff9f9; border-radius: 8px; border: 1px dashed #f0c0b8;
   }
   .chart-error p     { font-size: 0.72rem; color: var(--red); font-weight: 500; }
-  .chart-error small { font-size: 0.63rem; color: var(--ink-soft); text-align: center; max-width: 220px; }
+  .chart-error small { font-size: 0.62rem; color: var(--ink-soft); text-align: center; max-width: 230px; }
 
-  /* ═══ ACTIONS ═══════════════════════════════════════════════ */
-  .actions { display: flex; justify-content: center; margin-top: 16px; }
+  /* ═══ ACTIONS & DATA SOURCE NOTE ════════════════════════════ */
+  .actions { display: flex; justify-content: center; margin-top: 15px; }
   .btn-refresh {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 9px 20px; background: var(--gold-bg);
     color: var(--gold); border: 1px solid var(--gold-ring);
     border-radius: 10px; font-family: var(--font-body);
-    font-size: 0.77rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+    font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
   }
   .btn-refresh:hover { background: #fdeec0; transform: translateY(-1px); }
   .btn-refresh svg   { transition: transform 0.4s; }
   .btn-refresh:hover svg { transform: rotate(180deg); }
+
+  .source-note {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; margin-top: 10px;
+    font-size: 0.62rem; color: var(--ink-soft);
+  }
+  .source-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #eef5e8; border: 1px solid #c0d8a8;
+    border-radius: 20px; padding: 2px 7px;
+    font-size: 0.6rem; font-weight: 600; color: #3a7a28;
+  }
 
   /* ═══ SHIMMER ═══════════════════════════════════════════════ */
   .shimmer {
@@ -316,12 +292,12 @@
   /* ═══ FOOTER ════════════════════════════════════════════════ */
   .footer {
     text-align: center; margin-top: 22px;
-    font-size: 0.63rem; color: var(--ink-soft); line-height: 1.8;
+    font-size: 0.62rem; color: var(--ink-soft); line-height: 1.85;
   }
   .footer a { color: var(--ink-soft); text-decoration: none; }
 
   @media (max-width: 380px) {
-    .card-price { font-size: 1.2rem; }
+    .card-price { font-size: 1.15rem; }
     .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
     .period-tabs { width: 100%; }
     .p-btn { flex: 1; text-align: center; }
@@ -334,7 +310,10 @@
 <div class="header">
   <div class="header-left">
     <div class="logo-mark">⚖</div>
-    <h1>Gold and Silver<em>price trend</em></h1>
+    <div class="header-titles">
+      <h1>Gold &amp; <em>Silver</em></h1>
+      <div class="header-sub">Price Tracker · India</div>
+    </div>
   </div>
   <div class="header-right">
     <div class="live-badge"><span class="live-dot"></span> LIVE</div>
@@ -385,7 +364,6 @@
         <button class="p-btn"        onclick="setPeriod('5y',this)">5Y</button>
       </div>
     </div>
-
     <div class="charts-body">
       <div class="chart-section">
         <div class="chart-header">
@@ -400,9 +378,7 @@
           </div>
         </div>
       </div>
-
       <div class="chart-divider"></div>
-
       <div class="chart-section">
         <div class="chart-header">
           <div class="chart-title"><span class="swatch silver-swatch"></span> Silver (₹ / kg)</div>
@@ -429,25 +405,46 @@
     </button>
   </div>
 
-</div>
+  <div class="source-note">
+    <span class="source-badge">✓ Open Data</span>
+    Powered by <a href="https://open.er-api.com" target="_blank" style="color:var(--ink-soft);text-decoration:underline dotted;">ExchangeRate-API</a> — free, no key required
+  </div>
+
+</div><!-- end .main -->
 
 <div class="footer">
-  International rates via <a href="https://www.goldapi.io" target="_blank">GoldAPI.io</a> &bull;
+  Spot prices via <a href="https://open.er-api.com" target="_blank">open.er-api.com</a> (XAU · XAG · INR) &bull; No proprietary API key required<br>
   City premiums are indicative, based on typical local market variations<br>
   Gold per 10 g (24K) &bull; Silver per 1 kg &bull; Not financial advice
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════
+  JAVASCRIPT
+  Data source: https://open.er-api.com
+  ─ Free, no API key, no per-day hard limits
+  ─ Returns XAU (gold), XAG (silver), INR in one request
+  ─ Historical endpoint: /v6/history/USD/YYYY/M/D
+
+  Pricing formula (per request response):
+    rates.XAU  = troy oz of gold per 1 USD  (reciprocal = USD/oz)
+    rates.XAG  = troy oz of silver per 1 USD
+    rates.INR  = INR per 1 USD
+
+    gold INR/10g  = (1/XAU) * INR / 31.1035 * 10
+    silver INR/kg = (1/XAG) * INR / 31.1035 * 1000
+═══════════════════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-const API_KEY = 'goldapi-14iiv4smo37d402-io';
-const BASE    = 'https://www.goldapi.io/api';
+/* ── Data source ────────────────────────────────────────────── */
+// open.er-api.com — completely free, no API key, CORS-friendly.
+// Returns all forex rates including XAU (gold) and XAG (silver)
+// relative to USD, plus INR — everything needed in ONE call.
+const ER_API = 'https://open.er-api.com/v6';
 
-/*
-  City multipliers: approximate local market premiums over the MCX
-  benchmark (Mumbai = 1.000). Accounts for state levies, transport,
-  and local jewellery association pricing.
-*/
+/* ── City table ─────────────────────────────────────────────── */
+// Multipliers = typical local premium over MCX Mumbai benchmark.
+// Accounts for state levies, transport, jewellery association rates.
 const CITIES = [
   { id: 'pune',      name: 'Pune',      state: 'MH', gMul: 1.0008, sMul: 1.0005 },
   { id: 'mumbai',    name: 'Mumbai',    state: 'MH', gMul: 1.0000, sMul: 1.0000 },
@@ -461,25 +458,60 @@ const CITIES = [
   { id: 'lucknow',   name: 'Lucknow',   state: 'UP', gMul: 1.0012, sMul: 1.0007 },
 ];
 
+/* ── State ──────────────────────────────────────────────────── */
 let currentPeriod = '30d';
-let currentCity   = CITIES[0]; // Pune default
+let currentCity   = CITIES[0];   // Pune
 let goldChart     = null;
 let silverChart   = null;
-const cache       = {};
 
-// Stored base prices (before city multiplier)
+// Base prices stored after fetch (pre-city-multiplier)
 let _baseGold10g    = null;
 let _baseGoldPrev   = null;
 let _baseSilverKg   = null;
 let _baseSilverPrev = null;
 
-// Cached chart data (before multiplier)
+// Cached chart data (pre-city-multiplier)
 let _chartLabels = null;
 let _chartGold   = null;
 let _chartSilver = null;
 
-/* ── City strip ─────────────────────────────────────────────── */
+// Response cache (keyed by URL) to avoid redundant requests
+const CACHE = {};
 
+/* ── API wrapper ────────────────────────────────────────────── */
+// All data comes from a single endpoint per date.
+// Returns the `rates` object: { XAU, XAG, INR, ... }
+async function fetchRates(year = null, month = null, day = null) {
+  const url = (year !== null)
+    ? `${ER_API}/history/USD/${year}/${month}/${day}`
+    : `${ER_API}/latest/USD`;
+
+  if (CACHE[url]) return CACHE[url];
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Network error ${res.status}`);
+  const data = await res.json();
+  if (data.result !== 'success') throw new Error(data['error-type'] || 'API error');
+
+  CACHE[url] = data.rates;
+  return data.rates;
+}
+
+/* ── Conversion helpers ─────────────────────────────────────── */
+// rates.XAU = troy oz gold per 1 USD  → invert → USD per troy oz
+// Multiply by rates.INR → INR per troy oz
+// Divide by 31.1035 g/oz, multiply by 10 → INR per 10 g
+function goldPer10gINR(rates) {
+  return (1 / rates.XAU) * rates.INR / 31.1035 * 10;
+}
+function silverPerKgINR(rates) {
+  return (1 / rates.XAG) * rates.INR / 31.1035 * 1000;
+}
+function fmtINR(n) {
+  return '₹' + Math.round(n).toLocaleString('en-IN');
+}
+
+/* ── City strip ─────────────────────────────────────────────── */
 function buildCityStrip() {
   document.getElementById('cityStrip').innerHTML = CITIES.map(c =>
     `<button class="city-btn${c.id === currentCity.id ? ' active' : ''}"
@@ -499,82 +531,13 @@ function setCity(id, btn) {
   if (_chartGold) redrawChartsWithCity();
 }
 
-/* ── Helpers ────────────────────────────────────────────────── */
-
-function toYMD(d) {
-  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-}
-function ymdToDate(s) {
-  return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`);
-}
-function labelFor(s, period) {
-  const d = ymdToDate(s);
-  if (period === '5y') return d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
-}
-function skipWeekend(d) {
-  if (d.getDay() === 6) d.setDate(d.getDate() - 1);
-  if (d.getDay() === 0) d.setDate(d.getDate() - 2);
-  return d;
-}
-function buildDates(period) {
-  const today = skipWeekend(new Date());
-  const cfg = { '5d':{count:5,step:1}, '30d':{count:22,step:1}, '90d':{count:18,step:5}, '1y':{count:24,step:15}, '5y':{count:30,step:62} };
-  const { count, step } = cfg[period];
-  const dates = [];
-  for (let i = count; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i * step);
-    skipWeekend(d);
-    dates.push(toYMD(d));
-  }
-  return dates;
-}
-function fmtINR(n) {
-  return '₹' + Math.round(n).toLocaleString('en-IN');
-}
-
-/* ── API ────────────────────────────────────────────────────── */
-
-async function apiGet(symbol, dateStr = '') {
-  const url = `${BASE}/${symbol}/INR${dateStr ? '/' + dateStr : ''}`;
-  if (cache[url]) return cache[url];
-  const res = await fetch(url, { headers: { 'x-access-token': API_KEY, 'Content-Type': 'application/json' } });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  if (data.error) throw new Error(data.error);
-  cache[url] = data;
-  return data;
-}
-
-async function fetchBatch(symbol, dates) {
-  const results = [];
-  const BATCH = 4;
-  for (let i = 0; i < dates.length; i += BATCH) {
-    const batch = await Promise.all(dates.slice(i, i + BATCH).map(d => apiGet(symbol, d).catch(() => null)));
-    results.push(...batch);
-    if (i + BATCH < dates.length) await new Promise(r => setTimeout(r, 250));
-  }
-  return results;
-}
-
-/* ── Conversions ────────────────────────────────────────────── */
-
-function goldPer10g(data) {
-  return data.price_gram_24k ? data.price_gram_24k * 10 : (data.price / 31.1035) * 10;
-}
-function silverPerKg(data) {
-  return (data.price / 31.1035) * 1000;
-}
-
 /* ── Price cards ────────────────────────────────────────────── */
-
 function applyCity() {
   if (_baseGold10g === null) return;
   const gPrice = _baseGold10g * currentCity.gMul;
-  const gPrev  = _baseGoldPrev ? _baseGoldPrev * currentCity.gMul : null;
-  const sPrice = _baseSilverKg * currentCity.sMul;
-  const sPrev  = _baseSilverPrev ? _baseSilverPrev * currentCity.sMul : null;
+  const gPrev  = _baseGoldPrev  !== null ? _baseGoldPrev  * currentCity.gMul : null;
+  const sPrice = _baseSilverKg  * currentCity.sMul;
+  const sPrev  = _baseSilverPrev !== null ? _baseSilverPrev * currentCity.sMul : null;
   document.getElementById('goldPrice').textContent   = fmtINR(gPrice);
   document.getElementById('silverPrice').textContent = fmtINR(sPrice);
   setChange('goldChange',   gPrice, gPrev);
@@ -583,32 +546,106 @@ function applyCity() {
 
 function setChange(elId, current, prev) {
   const el = document.getElementById(elId);
-  if (!prev) { el.textContent = '—'; el.className = 'card-change neutral'; return; }
+  if (!prev || prev === 0) { el.textContent = '—'; el.className = 'card-change neutral'; return; }
   const diff = current - prev;
   const pct  = ((diff / prev) * 100).toFixed(2);
   el.textContent = `${diff >= 0 ? '▲' : '▼'} ${fmtINR(Math.abs(diff))} (${Math.abs(pct)}%)`;
   el.className   = 'card-change ' + (diff >= 0 ? 'up' : 'down');
 }
 
+/* ── Load live prices ───────────────────────────────────────── */
 async function loadPrices() {
   try {
-    const [g, s] = await Promise.all([apiGet('XAU'), apiGet('XAG')]);
-    _baseGold10g    = goldPer10g(g);
-    _baseGoldPrev   = g.prev_close_price ? (g.prev_close_price / 31.1035) * 10 : null;
-    _baseSilverKg   = silverPerKg(s);
-    _baseSilverPrev = s.prev_close_price ? (s.prev_close_price / 31.1035) * 1000 : null;
+    // Current rates (one request for XAU + XAG + INR — all in one)
+    const now   = new Date();
+    const rates = await fetchRates();
+
+    // For prev-close, fetch yesterday's rates (one extra request, cached)
+    const yest  = new Date(now); yest.setDate(yest.getDate() - 1);
+    // Skip weekends back to Friday
+    if (yest.getDay() === 0) yest.setDate(yest.getDate() - 2);
+    if (yest.getDay() === 6) yest.setDate(yest.getDate() - 1);
+
+    let prevRates = null;
+    try {
+      prevRates = await fetchRates(
+        yest.getFullYear(), yest.getMonth() + 1, yest.getDate()
+      );
+    } catch (_) { /* prev-close unavailable — non-fatal */ }
+
+    _baseGold10g    = goldPer10gINR(rates);
+    _baseSilverKg   = silverPerKgINR(rates);
+    _baseGoldPrev   = prevRates ? goldPer10gINR(prevRates)   : null;
+    _baseSilverPrev = prevRates ? silverPerKgINR(prevRates)  : null;
+
     applyCity();
+
     document.getElementById('updatedTime').textContent =
-      'Updated ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+      'Updated ' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
   } catch (err) {
     console.error('Price error:', err);
     ['goldPrice','silverPrice'].forEach(id => document.getElementById(id).textContent = 'Unavailable');
-    document.getElementById('updatedTime').textContent = 'Error loading data';
+    document.getElementById('updatedTime').textContent = 'Data error — try refreshing';
   }
 }
 
-/* ── Charts ─────────────────────────────────────────────────── */
+/* ── Date generation ────────────────────────────────────────── */
+// Returns array of Date objects, oldest first, skipping weekends.
+// Period configs keep total requests low (≤ 14 per period) since
+// open.er-api.com free tier allows ~1,500 req/month.
+function buildDateList(period) {
+  const cfg = {
+    //           points  step-days
+    '5d':  { n: 5,  step: 1   },
+    '30d': { n: 12, step: 2   },   // every other trading day
+    '90d': { n: 13, step: 7   },   // weekly
+    '1y':  { n: 12, step: 30  },   // monthly
+    '5y':  { n: 10, step: 183 },   // bi-annual
+  };
+  const { n, step } = cfg[period];
+  const today = new Date();
+  const dates = [];
+  for (let i = n; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i * step);
+    // nudge weekend → Friday
+    if (d.getDay() === 6) d.setDate(d.getDate() - 1);
+    if (d.getDay() === 0) d.setDate(d.getDate() - 2);
+    dates.push(d);
+  }
+  return dates;
+}
 
+function labelDate(d, period) {
+  if (period === '5y')
+    return d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
+  if (period === '1y')
+    return d.toLocaleDateString('en-IN', { month: 'short', year: '2-digit' });
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+}
+
+/* ── Fetch chart data ───────────────────────────────────────── */
+async function fetchDateRates(d) {
+  return fetchRates(d.getFullYear(), d.getMonth() + 1, d.getDate());
+}
+
+// Small concurrent batch to stay within rate limits
+async function fetchBatch(dates, batchSize = 4, delayMs = 200) {
+  const results = [];
+  for (let i = 0; i < dates.length; i += batchSize) {
+    const batch = await Promise.all(
+      dates.slice(i, i + batchSize).map(d => fetchDateRates(d).catch(() => null))
+    );
+    results.push(...batch);
+    if (i + batchSize < dates.length) {
+      await new Promise(r => setTimeout(r, delayMs));
+    }
+  }
+  return results;
+}
+
+/* ── Charts ─────────────────────────────────────────────────── */
 function showLoading(metal, visible, errMsg = null) {
   const el = document.getElementById(metal + 'Loading');
   if (!visible) { el.style.display = 'none'; return; }
@@ -623,12 +660,13 @@ function showLoading(metal, visible, errMsg = null) {
 
 function buildChart(canvasId, labels, prices, color, gradColor) {
   const ctx  = document.getElementById(canvasId).getContext('2d');
-  const grad = ctx.createLinearGradient(0, 0, 0, 180);
-  grad.addColorStop(0, gradColor + '30'); grad.addColorStop(1, gradColor + '00');
+  const grad = ctx.createLinearGradient(0, 0, 0, 178);
+  grad.addColorStop(0, gradColor + '2e');
+  grad.addColorStop(1, gradColor + '00');
 
   const isGold = canvasId === 'goldChart';
-  if (isGold && goldChart)   { goldChart.destroy();   goldChart   = null; }
-  if (!isGold && silverChart){ silverChart.destroy(); silverChart = null; }
+  if (isGold  && goldChart)   { goldChart.destroy();   goldChart   = null; }
+  if (!isGold && silverChart) { silverChart.destroy(); silverChart = null; }
 
   const chart = new Chart(ctx, {
     type: 'line',
@@ -637,13 +675,15 @@ function buildChart(canvasId, labels, prices, color, gradColor) {
       datasets: [{
         data: prices, borderColor: color, backgroundColor: grad,
         borderWidth: 2, fill: true, tension: 0.4,
-        pointRadius: prices.length > 20 ? 0 : 3, pointHoverRadius: 5,
-        pointBackgroundColor: color, pointBorderColor: 'white', pointBorderWidth: 1.5,
+        pointRadius: prices.length > 15 ? 0 : 3,
+        pointHoverRadius: 5,
+        pointBackgroundColor: color,
+        pointBorderColor: 'white', pointBorderWidth: 1.5,
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      animation: { duration: 500, easing: 'easeInOutQuart' },
+      animation: { duration: 450, easing: 'easeInOutQuart' },
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
@@ -653,20 +693,22 @@ function buildChart(canvasId, labels, prices, color, gradColor) {
           borderColor: '#ddd4c6', borderWidth: 1, padding: 10,
           titleFont: { family: 'DM Sans', size: 11 },
           bodyFont:  { family: 'Lora', size: 13, weight: '600' },
-          callbacks: { label: ctx => ' ' + fmtINR(ctx.raw) }
+          callbacks: { label: c => ' ' + fmtINR(c.raw) }
         }
       },
       scales: {
         x: {
           grid: { color: '#f0ede6', drawBorder: false },
-          ticks: { color: '#9a8f82', font: { family: 'DM Sans', size: 9 }, maxRotation: 35, maxTicksLimit: 7 }
+          ticks: { color: '#9a8f82', font: { family: 'DM Sans', size: 9 }, maxRotation: 40, maxTicksLimit: 7 }
         },
         y: {
           position: 'right',
           grid: { color: '#f0ede6', drawBorder: false },
           ticks: {
             color: '#9a8f82', font: { family: 'DM Sans', size: 9 },
-            callback: v => v >= 100000 ? '₹'+(v/100000).toFixed(1)+'L' : v >= 1000 ? '₹'+(v/1000).toFixed(0)+'k' : '₹'+v
+            callback: v =>
+              v >= 100000 ? '₹' + (v/100000).toFixed(1) + 'L' :
+              v >= 1000   ? '₹' + (v/1000).toFixed(0)   + 'k' : '₹' + v
           }
         }
       }
@@ -679,14 +721,13 @@ function setRangeStat(elId, prices) {
   if (!prices.length) return;
   const diff = prices[prices.length - 1] - prices[0];
   const pct  = ((diff / prices[0]) * 100).toFixed(1);
-  const sign = diff >= 0 ? '+' : '';
   const el   = document.getElementById(elId);
-  el.textContent = `${sign}${pct}% · ${fmtINR(Math.min(...prices))} – ${fmtINR(Math.max(...prices))}`;
+  el.textContent = `${diff >= 0 ? '+' : ''}${pct}% · ${fmtINR(Math.min(...prices))} – ${fmtINR(Math.max(...prices))}`;
   el.style.color  = diff >= 0 ? 'var(--green)' : 'var(--red)';
 }
 
 function redrawChartsWithCity() {
-  const gPrices = _chartGold.map(p => Math.round(p * currentCity.gMul));
+  const gPrices = _chartGold.map(p   => Math.round(p * currentCity.gMul));
   const sPrices = _chartSilver.map(p => Math.round(p * currentCity.sMul));
   buildChart('goldChart',   _chartLabels, gPrices, '#b8862a', '#c9922a');
   buildChart('silverChart', _chartLabels, sPrices, '#5f6b7a', '#8090a0');
@@ -702,23 +743,20 @@ async function loadCharts(period) {
   document.getElementById('goldRange').textContent   = '—';
   document.getElementById('silverRange').textContent = '—';
 
-  const dates = buildDates(period);
+  const dates   = buildDateList(period);
   try {
-    const [goldData, silverData] = await Promise.all([
-      fetchBatch('XAU', dates),
-      fetchBatch('XAG', dates)
-    ]);
+    const ratesList = await fetchBatch(dates);
 
     const labels = [], goldBase = [], silvBase = [];
     for (let i = 0; i < dates.length; i++) {
-      const g = goldData[i], s = silverData[i];
-      if (!g || !s || g.error || s.error) continue;
-      labels.push(labelFor(dates[i], period));
-      goldBase.push(goldPer10g(g));
-      silvBase.push(silverPerKg(s));
+      const r = ratesList[i];
+      if (!r || !r.XAU || !r.XAG || !r.INR) continue;
+      labels.push(labelDate(dates[i], period));
+      goldBase.push(goldPer10gINR(r));
+      silvBase.push(silverPerKgINR(r));
     }
 
-    if (labels.length < 2) throw new Error('Insufficient data — API may restrict historical access on this plan.');
+    if (labels.length < 2) throw new Error('Not enough data points returned. Try refreshing.');
 
     _chartLabels = labels;
     _chartGold   = goldBase;
@@ -734,24 +772,23 @@ async function loadCharts(period) {
 }
 
 /* ── Controls ───────────────────────────────────────────────── */
-
 function setPeriod(period, btn) {
   currentPeriod = period;
-  _chartGold    = null; // force fresh fetch
+  _chartGold    = null;   // force re-fetch for new period
   document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadCharts(period);
 }
 
 async function refreshAll() {
-  delete cache[`${BASE}/XAU/INR`];
-  delete cache[`${BASE}/XAG/INR`];
-  _chartGold = null;
+  // Bust live-price cache entries only
+  Object.keys(CACHE).forEach(k => { if (k.includes('/latest/')) delete CACHE[k]; });
+  _baseGold10g = null;
+  _chartGold   = null;
   await Promise.all([loadPrices(), loadCharts(currentPeriod)]);
 }
 
 /* ── Init ───────────────────────────────────────────────────── */
-
 (async function init() {
   buildCityStrip();
   setTimeout(() => {
@@ -765,3 +802,4 @@ async function refreshAll() {
 
 </body>
 </html>
+
