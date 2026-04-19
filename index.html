@@ -62,21 +62,14 @@
     font-weight: 700; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
   }
   .header h1 em { font-style: normal; color: var(--gold); }
-  .header-sub {
-    font-size: 0.58rem; color: var(--ink-soft); font-weight: 500;
-    letter-spacing: 0.04em; text-transform: uppercase;
-  }
+  .header-sub { font-size: 0.58rem; color: var(--ink-soft); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
   .header-right { text-align: right; flex-shrink: 0; }
   .live-badge {
     display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.65rem; font-weight: 600;
-    color: var(--green); background: #e8f5ee;
-    padding: 3px 7px; border-radius: 20px; margin-bottom: 2px;
+    font-size: 0.65rem; font-weight: 600; color: var(--green);
+    background: #e8f5ee; padding: 3px 7px; border-radius: 20px; margin-bottom: 2px;
   }
-  .live-dot {
-    width: 5px; height: 5px; background: var(--green);
-    border-radius: 50%; animation: pulse 2s infinite;
-  }
+  .live-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
   .updated-time { font-size: 0.6rem; color: var(--ink-soft); }
 
@@ -86,27 +79,20 @@
     position: sticky; top: 57px; z-index: 190;
     box-shadow: 0 2px 6px rgba(80,60,20,0.04);
   }
-  .city-strip {
-    display: flex; overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 14px; scrollbar-width: none;
-  }
+  .city-strip { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 14px; scrollbar-width: none; }
   .city-strip::-webkit-scrollbar { display: none; }
   .city-btn {
-    flex-shrink: 0; display: flex; flex-direction: column;
-    align-items: center; padding: 9px 14px 8px;
-    border: none; background: transparent; cursor: pointer;
-    font-family: var(--font-body); color: var(--ink-soft);
-    transition: all 0.18s; gap: 2px;
-    border-bottom: 2.5px solid transparent;
+    flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
+    padding: 9px 14px 8px; border: none; background: transparent; cursor: pointer;
+    font-family: var(--font-body); color: var(--ink-soft); transition: all 0.18s;
+    gap: 2px; border-bottom: 2.5px solid transparent;
   }
   .city-btn:hover { color: var(--ink); background: #fdfaf6; }
   .city-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
   .city-name  { font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
   .city-state { font-size: 0.56rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.7; }
   .city-strip-wrap::before, .city-strip-wrap::after {
-    content: ''; position: absolute; top: 0; bottom: 0;
-    width: 20px; z-index: 5; pointer-events: none;
+    content: ''; position: absolute; top: 0; bottom: 0; width: 20px; z-index: 5; pointer-events: none;
   }
   .city-strip-wrap::before { left: 0;  background: linear-gradient(90deg, white, transparent); }
   .city-strip-wrap::after  { right: 0; background: linear-gradient(-90deg, white, transparent); }
@@ -127,22 +113,17 @@
   /* PRICE CARDS */
   .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   .price-card {
-    background: white; border-radius: var(--radius);
-    padding: 16px 14px 12px;
+    background: white; border-radius: var(--radius); padding: 16px 14px 12px;
     box-shadow: var(--shadow-md); border: 1px solid var(--border);
-    position: relative; overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
   }
   .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-  .price-card::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-  }
+  .price-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
   .gold-card::after   { background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
   .silver-card::after { background: linear-gradient(90deg, var(--silver), var(--silver-lt)); }
   .card-watermark {
-    position: absolute; top: 8px; right: 10px;
-    font-size: 2rem; opacity: 0.06; line-height: 1;
-    pointer-events: none; font-family: var(--font-head); font-weight: 700;
+    position: absolute; top: 8px; right: 10px; font-size: 2rem; opacity: 0.06;
+    line-height: 1; pointer-events: none; font-family: var(--font-head); font-weight: 700;
   }
   .card-meta { font-size: 0.64rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); margin-bottom: 6px; }
   .card-price { font-family: var(--font-head); font-size: 1.35rem; font-weight: 700; line-height: 1.1; margin-bottom: 4px; }
@@ -150,31 +131,16 @@
   .silver-card .card-price { color: var(--silver); }
   .card-change { font-size: 0.69rem; font-weight: 500; display: flex; align-items: center; gap: 3px; }
   .card-period { font-size: 0.58rem; color: var(--ink-soft); margin-top: 2px; font-style: italic; }
-  .up      { color: var(--green); }
-  .down    { color: var(--red); }
-  .neutral { color: var(--ink-soft); }
+  .up { color: var(--green); } .down { color: var(--red); } .neutral { color: var(--ink-soft); }
   .card-unit { font-size: 0.59rem; color: var(--ink-soft); margin-top: 3px; }
 
   /* CHARTS PANEL */
-  .charts-panel {
-    background: white; border-radius: 20px;
-    box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden;
-  }
-  .panel-header {
-    padding: 15px 17px 13px; border-bottom: 1px solid var(--cream);
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  }
-  .panel-title {
-    font-family: var(--font-head); font-size: 0.88rem; font-weight: 600;
-    color: var(--ink); white-space: nowrap;
-  }
-  .period-tabs {
-    display: flex; gap: 3px; background: var(--cream);
-    border-radius: 10px; padding: 3px;
-  }
+  .charts-panel { background: white; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden; }
+  .panel-header { padding: 15px 17px 13px; border-bottom: 1px solid var(--cream); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .panel-title { font-family: var(--font-head); font-size: 0.88rem; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .period-tabs { display: flex; gap: 3px; background: var(--cream); border-radius: 10px; padding: 3px; }
   .p-btn {
-    padding: 5px 9px; border: none; border-radius: 7px;
-    background: transparent; color: var(--ink-soft);
+    padding: 5px 9px; border: none; border-radius: 7px; background: transparent; color: var(--ink-soft);
     font-family: var(--font-body); font-size: 0.67rem; font-weight: 600;
     letter-spacing: 0.02em; cursor: pointer; transition: all 0.18s; white-space: nowrap;
   }
@@ -184,81 +150,53 @@
   .chart-section { margin-bottom: 17px; }
   .chart-section:last-child { margin-bottom: 0; }
   .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .chart-title {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 0.71rem; font-weight: 600; color: var(--ink-mid);
-    text-transform: uppercase; letter-spacing: 0.06em;
-  }
+  .chart-title { display: flex; align-items: center; gap: 6px; font-size: 0.71rem; font-weight: 600; color: var(--ink-mid); text-transform: uppercase; letter-spacing: 0.06em; }
   .swatch { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
   .gold-swatch   { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); }
   .silver-swatch { background: linear-gradient(135deg, var(--silver), var(--silver-lt)); }
   .chart-stat { font-size: 0.67rem; color: var(--ink-soft); font-weight: 500; }
   .chart-wrap { height: 178px; position: relative; }
   .chart-divider { height: 1px; background: var(--cream); margin: 13px 0; }
-
   .chart-loading {
-    position: absolute; inset: 0;
-    background: rgba(250,247,242,0.92);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 8px;
-    border-radius: 8px; backdrop-filter: blur(2px); z-index: 20;
+    position: absolute; inset: 0; background: rgba(250,247,242,0.92);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; border-radius: 8px; backdrop-filter: blur(2px); z-index: 20;
   }
-  .spinner {
-    width: 22px; height: 22px;
-    border: 2.5px solid var(--parchment);
-    border-top-color: var(--gold); border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
+  .spinner { width: 22px; height: 22px; border: 2.5px solid var(--parchment); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-text { font-size: 0.67rem; color: var(--ink-soft); font-weight: 500; }
   .chart-error {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
+    position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 5px;
     background: #fff9f9; border-radius: 8px; border: 1px dashed #f0c0b8;
   }
-  .chart-error p     { font-size: 0.72rem; color: var(--red); font-weight: 500; }
+  .chart-error p { font-size: 0.72rem; color: var(--red); font-weight: 500; }
   .chart-error small { font-size: 0.62rem; color: var(--ink-soft); text-align: center; max-width: 240px; }
 
   /* ACTIONS */
   .actions { display: flex; justify-content: center; margin-top: 15px; }
   .btn-refresh {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 9px 20px; background: var(--gold-bg);
-    color: var(--gold); border: 1px solid var(--gold-ring);
-    border-radius: 10px; font-family: var(--font-body);
-    font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+    display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px;
+    background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-ring);
+    border-radius: 10px; font-family: var(--font-body); font-size: 0.76rem; font-weight: 600;
+    cursor: pointer; transition: all 0.18s;
   }
   .btn-refresh:hover { background: #fdeec0; transform: translateY(-1px); }
-  .btn-refresh svg   { transition: transform 0.4s; }
+  .btn-refresh svg { transition: transform 0.4s; }
   .btn-refresh:hover svg { transform: rotate(180deg); }
-
-  .source-note {
-    display: flex; align-items: center; justify-content: center;
-    gap: 6px; margin-top: 10px;
-    font-size: 0.6rem; color: var(--ink-soft);
-  }
-  .source-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: #eef5e8; border: 1px solid #c0d8a8;
-    border-radius: 20px; padding: 2px 7px;
-    font-size: 0.58rem; font-weight: 600; color: #3a7a28;
-  }
+  .source-note { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; font-size: 0.6rem; color: var(--ink-soft); flex-wrap: wrap; text-align: center; }
+  .source-badge { display: inline-flex; align-items: center; gap: 4px; background: #eef5e8; border: 1px solid #c0d8a8; border-radius: 20px; padding: 2px 7px; font-size: 0.58rem; font-weight: 600; color: #3a7a28; }
 
   /* SHIMMER */
   .shimmer {
     display: inline-block; width: 76px; height: 20px;
     background: linear-gradient(90deg, var(--cream) 25%, var(--parchment) 50%, var(--cream) 75%);
-    background-size: 200% 100%; border-radius: 5px;
-    animation: shimmer 1.2s infinite;
+    background-size: 200% 100%; border-radius: 5px; animation: shimmer 1.2s infinite;
   }
   @keyframes shimmer { to { background-position: -200% 0; } }
 
   /* FOOTER */
-  .footer {
-    text-align: center; margin-top: 22px;
-    font-size: 0.62rem; color: var(--ink-soft); line-height: 1.85;
-  }
+  .footer { text-align: center; margin-top: 22px; font-size: 0.62rem; color: var(--ink-soft); line-height: 1.85; }
   .footer a { color: var(--ink-soft); text-decoration: none; }
 
   @media (max-width: 380px) {
@@ -299,7 +237,6 @@
     <div class="city-note">Local market rate — includes applicable levies</div>
   </div>
 
-  <!-- Price cards -->
   <div class="price-grid">
     <div class="price-card gold-card">
       <div class="card-watermark">Au</div>
@@ -319,7 +256,6 @@
     </div>
   </div>
 
-  <!-- Charts panel -->
   <div class="charts-panel">
     <div class="panel-header">
       <div class="panel-title">Price Trend</div>
@@ -374,48 +310,56 @@
 
   <div class="source-note">
     <span class="source-badge">✓ Open Data</span>
-    Live spot via <a href="https://open.er-api.com" target="_blank" style="color:var(--ink-soft);">open.er-api.com</a>
-    &bull; INR history via <a href="https://www.frankfurter.app" target="_blank" style="color:var(--ink-soft);">frankfurter.app</a>
+    Live: <a href="https://open.er-api.com" target="_blank" style="color:var(--ink-soft);">open.er-api.com</a>
+    &bull; History: <a href="https://www.frankfurter.app" target="_blank" style="color:var(--ink-soft);">frankfurter.app</a>
     &bull; No API key required
   </div>
 
 </div>
 
 <div class="footer">
-  Live spot prices: <a href="https://open.er-api.com" target="_blank">open.er-api.com</a> (XAU · XAG · INR) &bull;
-  Historical INR rates: <a href="https://www.frankfurter.app" target="_blank">frankfurter.app</a><br>
-  Historical USD metal prices based on documented market reference data, anchored to live spot<br>
-  City premiums are indicative &bull; Gold per 10 g (24K) &bull; Silver per 1 kg &bull; Not financial advice
+  Live spot via <a href="https://open.er-api.com" target="_blank">open.er-api.com</a> (XAU · XAG · INR) &bull;
+  Historical INR via <a href="https://www.frankfurter.app" target="_blank">frankfurter.app</a><br>
+  Historical USD metal prices from reference data, anchored to live spot &bull; City premiums are indicative<br>
+  Gold per 10 g (24K) &bull; Silver per 1 kg &bull; Not financial advice
 </div>
 
-<!-- ================================================================
-  JAVASCRIPT
-  ================================================================
-
-  DATA ARCHITECTURE (three sources — all free, no API key needed):
-  ─────────────────────────────────────────────────────────────────
-  1. open.er-api.com/v6/latest/USD
-     → Live XAU (gold troy-oz per USD), XAG (silver), INR per USD.
-     → ONE request returns all three. Free forever, CORS-enabled.
-
-  2. api.frankfurter.app/{from}..{to}?from=USD&to=INR
-     → Historical USD→INR exchange rates for a date range.
-     → ONE request returns every business day's rate in the range.
-     → Free, no key, CORS-enabled, ECB-sourced data.
-
-  3. GOLD_USD_REF / SILVER_USD_REF (inline reference tables)
-     → Historical gold/silver USD spot prices at key monthly dates,
-       compiled from well-documented public market data.
-     → The live API price is appended as "today" so every chart
-       is anchored to the actual current spot price.
-     → Linear interpolation between anchor points for each date.
-
-  PRICE FORMULA:
-    gold  INR / 10 g = (1/XAU) × INR_rate / 31.1035 × 10
-    silver INR / kg  = (1/XAG) × INR_rate / 31.1035 × 1000
-================================================================ -->
 <script>
 'use strict';
+
+/* ─────────────────────────────────────────────────────────────
+   WHAT CHANGED AND WHY
+   ─────────────────────────────────────────────────────────────
+   Root cause of HTTP 304 errors:
+   When `fetch()` sends a request and the browser's HTTP cache
+   already has a matching ETag or Last-Modified header, the server
+   replies "304 Not Modified" (no body). The previous code did
+   `if (!res.ok) throw` — but 304 passes that check (it's in the
+   200–399 range), then `res.json()` THROWS because a 304 response
+   has an empty body. This silently broke all data fetching.
+
+   FIX 1 — `cache: 'no-store'` on every fetch() call.
+     This tells the browser: never use or store a cache entry for
+     this request. The server will always respond with 200 + body.
+     304 will never occur.
+
+   FIX 2 — Safe JSON parsing with safeJSON().
+     Wraps res.json() in a try/catch. If the body is unexpectedly
+     empty (e.g. network hiccup), we throw a descriptive error
+     instead of an opaque crash.
+
+   FIX 3 — Validate XAU / XAG in the live response.
+     open.er-api.com free tier returns XAU and XAG for most
+     requests, but will occasionally omit them. The code now checks
+     explicitly and throws a clear message rather than dividing by
+     undefined (which produced NaN silently).
+
+   FIX 4 — Frankfurter date range guard.
+     The Frankfurter API returns a flat `rates` object for single-
+     day requests but a nested object for ranges. Added a guard so
+     both formats are handled, preventing the "< 2 data points"
+     error on the 5D view.
+   ───────────────────────────────────────────────────────────── */
 
 /* ── City table ─────────────────────────────────────────────── */
 const CITIES = [
@@ -431,13 +375,12 @@ const CITIES = [
   { id: 'lucknow',   name: 'Lucknow',   state: 'UP', gMul: 1.0012, sMul: 1.0007 },
 ];
 
-/* ── Historical USD spot price reference tables ──────────────
-   Gold and silver USD/troy-oz at key monthly dates.
-   Compiled from documented public market data (LBMA, MCX, Kitco).
-   The live API price is appended as today's anchor so all charts
-   end at the real current spot price.
+/* ── Historical USD spot reference tables ────────────────────
+   Monthly anchor points compiled from LBMA / Kitco public data.
+   The live API price is injected as today's anchor so every chart
+   always ends at the actual current spot price.
 ──────────────────────────────────────────────────────────────── */
-const GOLD_USD_REF = [
+const GOLD_REF = [
   ['2019-01-01',1280],['2019-04-01',1296],['2019-07-01',1420],
   ['2019-10-01',1495],['2020-01-01',1560],['2020-03-01',1650],
   ['2020-04-01',1693],['2020-06-01',1730],['2020-08-01',2028],
@@ -454,7 +397,7 @@ const GOLD_USD_REF = [
   ['2025-07-01',3350],['2025-08-01',3100],
 ];
 
-const SILVER_USD_REF = [
+const SILVER_REF = [
   ['2019-01-01',15.5],['2019-04-01',15.0],['2019-07-01',15.8],
   ['2019-10-01',17.5],['2020-01-01',18.0],['2020-03-01',16.0],
   ['2020-04-01',15.2],['2020-06-01',17.5],['2020-08-01',27.0],
@@ -472,33 +415,133 @@ const SILVER_USD_REF = [
 ];
 
 /* ── Period config ──────────────────────────────────────────── */
-const PERIOD_DAYS = { '5d': 5, '30d': 30, '90d': 90, '1y': 365, '5y': 1825 };
-const PERIOD_LABEL = { '5d': '5 days', '30d': '30 days', '90d': '90 days', '1y': '1 year', '5y': '5 years' };
-// Sample every Nth business day from Frankfurter results
-const PERIOD_SAMPLE = { '5d': 1, '30d': 1, '90d': 4, '1y': 13, '5y': 52 };
+const PERIOD_DAYS   = { '5d':5,  '30d':30,  '90d':90,  '1y':365,  '5y':1825 };
+const PERIOD_LABEL  = { '5d':'5 days', '30d':'30 days', '90d':'90 days', '1y':'1 year', '5y':'5 years' };
+const PERIOD_SAMPLE = { '5d':1,  '30d':1,   '90d':4,   '1y':13,   '5y':52   };
 
 /* ── App state ──────────────────────────────────────────────── */
-let currentPeriod = '30d';
-let currentCity   = CITIES[0];
-let goldChart     = null;
-let silverChart   = null;
+let currentPeriod  = '30d';
+let currentCity    = CITIES[0];
+let goldChart      = null;
+let silverChart    = null;
+let _liveGoldUSD   = null;
+let _liveSilverUSD = null;
+let _liveINR       = null;
+let _baseGold10g   = null;
+let _baseSilverKg  = null;
+let _chartLabels   = null;
+let _chartGold     = null;
+let _chartSilver   = null;
 
-let _liveGoldUSD    = null;   // live gold USD/oz from API
-let _liveSilverUSD  = null;   // live silver USD/oz
-let _liveINR        = null;   // live USD→INR rate
-let _baseGold10g    = null;   // computed INR/10g (pre-city-mul)
-let _baseSilverKg   = null;   // computed INR/kg  (pre-city-mul)
+// In-memory cache (keyed by URL) — avoids repeat network calls
+// within a session. Always bypassed by refreshAll().
+const MEM = {};
 
-let _chartLabels = null;
-let _chartGold   = null;   // pre-city-mul base prices
-let _chartSilver = null;
+/* ─────────────────────────────────────────────────────────────
+   CORE FETCH HELPER
+   KEY FIX: cache: 'no-store'
+   Tells the browser to NEVER consult or populate its HTTP cache
+   for these requests. This is the direct fix for the 304 bug:
+   with no cache entry to validate, the server has nothing to
+   respond with a "304 Not Modified" to — it must return 200 + body.
+   ───────────────────────────────────────────────────────────── */
+async function safeFetch(url) {
+  if (MEM[url]) return MEM[url];
 
-const CACHE = {};
+  const res = await fetch(url, {
+    cache: 'no-store',          // FIX 1: prevents 304 at the HTTP level
+    headers: { 'Accept': 'application/json' }
+  });
 
-/* ── Utility ────────────────────────────────────────────────── */
-function toISO(d) {
-  // Returns YYYY-MM-DD
-  return d.toISOString().slice(0, 10);
+  // FIX 2: explicit status check — no more silent 304 body failures
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} from ${new URL(url).hostname}`);
+  }
+
+  // FIX 2 cont.: safe JSON parse — empty body now throws a clear error
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    throw new Error(`Empty or invalid JSON from ${new URL(url).hostname}`);
+  }
+
+  MEM[url] = data;
+  return data;
+}
+
+/* ── Live rates: open.er-api.com ────────────────────────────
+   Returns XAU, XAG, INR and ~160 other currencies in one call.
+   Free, no API key, CORS-enabled.
+──────────────────────────────────────────────────────────────── */
+async function fetchLiveRates() {
+  const data = await safeFetch('https://open.er-api.com/v6/latest/USD');
+  if (data.result !== 'success') throw new Error(data['error-type'] || 'API error');
+
+  // FIX 3: validate XAU/XAG are present before using them
+  if (!data.rates?.XAU || !data.rates?.XAG || !data.rates?.INR) {
+    throw new Error('XAU/XAG/INR missing from open.er-api response. Try refreshing.');
+  }
+  return data.rates;
+}
+
+/* ── Historical INR rates: frankfurter.app ──────────────────
+   Single request returns every business day's USD→INR rate
+   for the entire date range. Free, no key, ECB-sourced, CORS OK.
+
+   FIX 4: Frankfurter returns different shapes for different ranges:
+     Single day:  { "rates": { "INR": 83.5 } }           ← flat
+     Multi-day:   { "rates": { "2024-01-02": { "INR": 83.2 }, ... } }
+   We normalise both into { "YYYY-MM-DD": inrValue } here.
+──────────────────────────────────────────────────────────────── */
+async function fetchINRHistory(fromISO, toISO) {
+  const url  = `https://api.frankfurter.app/${fromISO}..${toISO}?from=USD&to=INR`;
+  const data = await safeFetch(url);
+
+  const raw = data.rates || {};
+
+  // Detect flat (single-date) vs nested (range) shape
+  const firstVal = Object.values(raw)[0];
+  if (typeof firstVal === 'number') {
+    // Single-date flat shape: { "INR": 83.5 } → normalise to { fromISO: 83.5 }
+    return { [fromISO]: firstVal };
+  }
+
+  // Normal range shape: { "2024-01-02": { "INR": 83.2 } }
+  // Extract just the INR value per date for convenience
+  const result = {};
+  for (const [date, currencies] of Object.entries(raw)) {
+    if (currencies?.INR) result[date] = currencies.INR;
+  }
+  return result;
+}
+
+/* ── Interpolation helper ───────────────────────────────────
+   Returns interpolated USD spot price for any target date,
+   using the reference table anchored to the live price at today.
+──────────────────────────────────────────────────────────────── */
+function interpolateUSD(targetDate, refTable, liveUSD, todayMs) {
+  const pts = refTable.map(([iso, p]) => [new Date(iso + 'T00:00:00').getTime(), p]);
+  pts.push([todayMs, liveUSD]);
+  pts.sort((a, b) => a[0] - b[0]);
+
+  const t = targetDate.getTime();
+  if (t <= pts[0][0]) return pts[0][1];
+  if (t >= pts[pts.length - 1][0]) return liveUSD;
+
+  for (let i = 0; i < pts.length - 1; i++) {
+    if (t >= pts[i][0] && t <= pts[i + 1][0]) {
+      const span  = pts[i + 1][0] - pts[i][0];
+      const ratio = span === 0 ? 0 : (t - pts[i][0]) / span;
+      return pts[i][1] + ratio * (pts[i + 1][1] - pts[i][1]);
+    }
+  }
+  return liveUSD;
+}
+
+/* ── Formatting ─────────────────────────────────────────────── */
+function fmtINR(n) {
+  return '₹' + Math.round(n).toLocaleString('en-IN');
 }
 
 function fmtLabel(iso, period) {
@@ -508,80 +551,23 @@ function fmtLabel(iso, period) {
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
 }
 
-function fmtINR(n) {
-  return '₹' + Math.round(n).toLocaleString('en-IN');
+function dateToISO(d) {
+  // Always formats in local time (avoids UTC-shift issues with toISOString)
+  const y  = d.getFullYear();
+  const m  = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${dd}`;
 }
 
-function skipToFriday(d) {
-  // If d lands on Saturday/Sunday push back to Friday
-  const day = d.getDay();
-  if (day === 6) d.setDate(d.getDate() - 1);
-  if (day === 0) d.setDate(d.getDate() - 2);
-  return d;
+function prevBusinessDay(d) {
+  const r = new Date(d);
+  r.setDate(r.getDate() - 1);
+  if (r.getDay() === 0) r.setDate(r.getDate() - 2); // Sun→Fri
+  if (r.getDay() === 6) r.setDate(r.getDate() - 1); // Sat→Fri
+  return r;
 }
 
-/* ── Source 1: open.er-api.com ──────────────────────────────
-   Returns all live FX rates including XAU and XAG in one call.
-   Free, no key required, CORS-enabled.
-──────────────────────────────────────────────────────────────── */
-async function fetchLiveRates() {
-  const url = 'https://open.er-api.com/v6/latest/USD';
-  if (CACHE[url]) return CACHE[url];
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`open.er-api: HTTP ${res.status}`);
-  const data = await res.json();
-  if (data.result !== 'success') throw new Error(data['error-type'] || 'open.er-api error');
-  CACHE[url] = data.rates;
-  return data.rates;
-}
-
-/* ── Source 2: Frankfurter.app ──────────────────────────────
-   Returns historical USD→INR rates for a date range in ONE call.
-   Free, no key required, CORS-enabled, ECB-sourced.
-   fromISO / toISO: 'YYYY-MM-DD'
-──────────────────────────────────────────────────────────────── */
-async function fetchINRHistory(fromISO, toISO) {
-  const url = `https://api.frankfurter.app/${fromISO}..${toISO}?from=USD&to=INR`;
-  if (CACHE[url]) return CACHE[url];
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Frankfurter: HTTP ${res.status}`);
-  const data = await res.json();
-  // data.rates = { "2024-01-02": { "INR": 83.2 }, ... }
-  CACHE[url] = data.rates || {};
-  return CACHE[url];
-}
-
-/* ── Source 3: Reference price interpolation ─────────────────
-   Linearly interpolates a USD spot price for any given date
-   from the reference table. The live API price is injected as
-   today's anchor so charts always end at the real current value.
-──────────────────────────────────────────────────────────────── */
-function interpolateUSD(targetDate, refTable, liveUSD, today) {
-  // Build sorted array of [timestamp_ms, price_usd]
-  const pts = refTable.map(([iso, p]) => [new Date(iso + 'T00:00:00').getTime(), p]);
-  pts.push([today.getTime(), liveUSD]); // anchor to live price
-  pts.sort((a, b) => a[0] - b[0]);
-
-  const t = targetDate.getTime();
-
-  // Before first point — return first price
-  if (t <= pts[0][0]) return pts[0][1];
-
-  // After last point (today) — return live price
-  if (t >= pts[pts.length - 1][0]) return liveUSD;
-
-  // Find surrounding bracket and lerp
-  for (let i = 0; i < pts.length - 1; i++) {
-    if (t >= pts[i][0] && t <= pts[i + 1][0]) {
-      const span  = pts[i + 1][0] - pts[i][0];
-      const ratio = span === 0 ? 0 : (t - pts[i][0]) / span;
-      return pts[i][1] + ratio * (pts[i + 1][1] - pts[i][1]);
-    }
-  }
-  return liveUSD; // fallback
-}
-
-/* ── Price card helpers ─────────────────────────────────────── */
+/* ── Price card rendering ───────────────────────────────────── */
 function applyCity() {
   if (_baseGold10g === null) return;
   document.getElementById('goldPrice').textContent   = fmtINR(_baseGold10g  * currentCity.gMul);
@@ -590,21 +576,17 @@ function applyCity() {
 
 function setChange(elId, current, prev) {
   const el = document.getElementById(elId);
-  if (!prev) { el.textContent = '—'; el.className = 'card-change neutral'; return; }
-  const diff  = current - prev;
-  const pct   = ((diff / prev) * 100).toFixed(2);
+  if (!prev || prev === 0) { el.textContent = '—'; el.className = 'card-change neutral'; return; }
+  const diff = current - prev;
+  const pct  = ((diff / prev) * 100).toFixed(2);
   el.textContent = `${diff >= 0 ? '▲' : '▼'} ${fmtINR(Math.abs(diff))} (${Math.abs(pct)}%)`;
   el.className   = 'card-change ' + (diff >= 0 ? 'up' : 'down');
 }
 
 function updatePeriodChange() {
   if (!_chartGold || !_baseGold10g) return;
-  const gNow   = _baseGold10g  * currentCity.gMul;
-  const sNow   = _baseSilverKg * currentCity.sMul;
-  const gThen  = _chartGold[0]   * currentCity.gMul;
-  const sThen  = _chartSilver[0] * currentCity.sMul;
-  setChange('goldChange',   gNow, gThen);
-  setChange('silverChange', sNow, sThen);
+  setChange('goldChange',   _baseGold10g  * currentCity.gMul, _chartGold[0]   * currentCity.gMul);
+  setChange('silverChange', _baseSilverKg * currentCity.sMul, _chartSilver[0] * currentCity.sMul);
   const lbl = `vs ${PERIOD_LABEL[currentPeriod]} ago`;
   document.getElementById('goldPeriodLabel').textContent   = lbl;
   document.getElementById('silverPeriodLabel').textContent = lbl;
@@ -615,30 +597,27 @@ async function loadPrices() {
   try {
     const rates = await fetchLiveRates();
 
-    // XAU = troy-oz gold per 1 USD → invert → USD per troy-oz
+    // rates.XAU = troy-oz of gold per 1 USD → invert → USD per troy-oz
     _liveGoldUSD   = 1 / rates.XAU;
     _liveSilverUSD = 1 / rates.XAG;
     _liveINR       = rates.INR;
 
-    // Convert to INR: USD/oz × INR/USD ÷ 31.1035 g/oz × grams
-    _baseGold10g   = _liveGoldUSD   * _liveINR / 31.1035 * 10;
-    _baseSilverKg  = _liveSilverUSD * _liveINR / 31.1035 * 1000;
+    // Convert: USD/oz × INR/USD ÷ 31.1035 g/oz × desired grams
+    _baseGold10g  = _liveGoldUSD   * _liveINR / 31.1035 * 10;
+    _baseSilverKg = _liveSilverUSD * _liveINR / 31.1035 * 1000;
 
     applyCity();
-
     document.getElementById('updatedTime').textContent =
       'Updated ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
   } catch (err) {
     console.error('Live price error:', err);
-    ['goldPrice', 'silverPrice'].forEach(id => {
-      document.getElementById(id).textContent = 'Unavailable';
-    });
-    document.getElementById('updatedTime').textContent = 'Connection error';
+    ['goldPrice', 'silverPrice'].forEach(id => document.getElementById(id).textContent = 'Unavailable');
+    document.getElementById('updatedTime').textContent = err.message || 'Connection error';
   }
 }
 
-/* ── Build chart data ───────────────────────────────────────── */
+/* ── Load chart data ────────────────────────────────────────── */
 async function loadCharts(period) {
   showLoading('gold',   true);
   showLoading('silver', true);
@@ -646,56 +625,61 @@ async function loadCharts(period) {
   document.getElementById('silverRange').textContent = '—';
 
   try {
-    // Need live USD prices to anchor interpolation
     if (!_liveGoldUSD) await loadPrices();
-    if (!_liveGoldUSD) throw new Error('Live prices unavailable.');
+    if (!_liveGoldUSD) throw new Error('Live prices unavailable — please refresh.');
 
-    const today    = new Date();
-    const fromDate = new Date(today);
+    const todayDate = new Date();
+    const todayMs   = todayDate.getTime();
+    const todayISO  = dateToISO(todayDate);
+
+    // Calculate the start date
+    const fromDate  = new Date(todayDate);
     fromDate.setDate(fromDate.getDate() - PERIOD_DAYS[period]);
-    skipToFriday(fromDate);
+    // Nudge weekends to the previous Friday
+    if (fromDate.getDay() === 6) fromDate.setDate(fromDate.getDate() - 1);
+    if (fromDate.getDay() === 0) fromDate.setDate(fromDate.getDate() - 2);
+    const fromISO = dateToISO(fromDate);
 
-    const fromISO = toISO(fromDate);
-    const toISO_  = toISO(today);
+    // Fetch all INR rates for the range in one call
+    const inrByDate = await fetchINRHistory(fromISO, todayISO);
 
-    // ── Fetch historical INR rates (ONE network request) ───────
-    const inrHistory = await fetchINRHistory(fromISO, toISO_);
-    const allDates   = Object.keys(inrHistory).sort(); // sorted ascending
+    // Frankfurter only has rates up to yesterday (ECB publishes at ~16:00 CET)
+    // Inject today's live INR rate so the chart always reaches today
+    inrByDate[todayISO] = _liveINR;
 
-    if (allDates.length < 2) {
-      throw new Error('Frankfurter returned no data for this date range. Try again shortly.');
+    const allDates = Object.keys(inrByDate).sort();
+
+    if (allDates.length < 1) {
+      throw new Error('No INR rate data returned by Frankfurter. Please try again.');
     }
 
-    // ── Sample dates based on period ──────────────────────────
+    // Sample dates at the appropriate density for each period
     const step = PERIOD_SAMPLE[period];
-    const sampledDates = [];
-    for (let i = 0; i < allDates.length; i += step) {
-      sampledDates.push(allDates[i]);
-    }
-    // Always include the most recent date as the last point
-    const lastAvail = allDates[allDates.length - 1];
-    if (sampledDates[sampledDates.length - 1] !== lastAvail) {
-      sampledDates.push(lastAvail);
-    }
+    const sampled = [];
+    for (let i = 0; i < allDates.length; i += step) sampled.push(allDates[i]);
 
-    // ── Build price arrays ────────────────────────────────────
+    // Always ensure the most recent date is included as the last point
+    const lastDate = allDates[allDates.length - 1];
+    if (sampled[sampled.length - 1] !== lastDate) sampled.push(lastDate);
+
+    // Build price arrays using interpolated USD metal price × real INR rate
     const labels = [], goldBase = [], silvBase = [];
 
-    for (const iso of sampledDates) {
-      const inrRate = inrHistory[iso]?.INR;
-      if (!inrRate) continue;
+    for (const iso of sampled) {
+      const inrRate = inrByDate[iso];
+      if (!inrRate || inrRate <= 0) continue;
 
-      const d       = new Date(iso + 'T00:00:00');
-      const gUSD    = interpolateUSD(d, GOLD_USD_REF,   _liveGoldUSD,   today);
-      const sUSD    = interpolateUSD(d, SILVER_USD_REF, _liveSilverUSD, today);
+      const d    = new Date(iso + 'T00:00:00');
+      const gUSD = interpolateUSD(d, GOLD_REF,   _liveGoldUSD,   todayMs);
+      const sUSD = interpolateUSD(d, SILVER_REF, _liveSilverUSD, todayMs);
 
       labels.push(fmtLabel(iso, period));
-      goldBase.push(gUSD   * inrRate / 31.1035 * 10);
-      silvBase.push(sUSD   * inrRate / 31.1035 * 1000);
+      goldBase.push(gUSD * inrRate / 31.1035 * 10);
+      silvBase.push(sUSD * inrRate / 31.1035 * 1000);
     }
 
     if (labels.length < 2) {
-      throw new Error('Not enough data points after filtering. Try a different period.');
+      throw new Error('Not enough data points for this period. Please try a wider range.');
     }
 
     _chartLabels = labels;
@@ -712,7 +696,7 @@ async function loadCharts(period) {
   }
 }
 
-/* ── Render charts ──────────────────────────────────────────── */
+/* ── Chart rendering ────────────────────────────────────────── */
 function redrawChartsWithCity() {
   if (!_chartGold) return;
   const gPrices = _chartGold.map(p   => Math.round(p * currentCity.gMul));
@@ -743,8 +727,7 @@ function drawChart(canvasId, labels, prices, color, gradColor) {
         data: prices, borderColor: color, backgroundColor: grad,
         borderWidth: 2, fill: true, tension: 0.4,
         pointRadius: prices.length > 18 ? 0 : 3,
-        pointHoverRadius: 5,
-        pointBackgroundColor: color,
+        pointHoverRadius: 5, pointBackgroundColor: color,
         pointBorderColor: 'white', pointBorderWidth: 1.5,
       }]
     },
@@ -822,28 +805,23 @@ function setCity(id, btn) {
   btn.classList.add('active');
   document.getElementById('cityLabel').textContent = currentCity.name;
   applyCity();
-  if (_chartGold) {
-    redrawChartsWithCity();
-    updatePeriodChange();
-  }
+  if (_chartGold) { redrawChartsWithCity(); updatePeriodChange(); }
 }
 
-/* ── Period tabs ────────────────────────────────────────────── */
+/* ── Controls ───────────────────────────────────────────────── */
 function setPeriod(period, btn) {
   currentPeriod = period;
-  _chartGold    = null;   // invalidate cache so fresh data is loaded
+  _chartGold    = null;
   document.querySelectorAll('.p-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   loadCharts(period);
 }
 
-/* ── Refresh ────────────────────────────────────────────────── */
 async function refreshAll() {
-  // Bust caches for live endpoint only
-  Object.keys(CACHE).forEach(k => {
-    if (k.includes('open.er-api.com')) delete CACHE[k];
-  });
+  // Clear in-memory cache for live data, keep Frankfurter historical
+  Object.keys(MEM).forEach(k => { if (k.includes('open.er-api')) delete MEM[k]; });
   _liveGoldUSD = null;
+  _baseGold10g = null;
   _chartGold   = null;
   await loadPrices();
   await loadCharts(currentPeriod);
