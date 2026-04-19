@@ -63,23 +63,17 @@ h1{font-size:1.8rem;margin-bottom:8px}
 <body>
 
 <div class="container">
-  <div style="background:#fff3cd;border:3px solid #dc3545;border-radius:10px;padding:16px;margin-bottom:24px;box-shadow:0 4px 12px rgba(220,53,69,0.2)">
-    <div style="display:flex;align-items:start;gap:12px">
-      <div style="font-size:2rem;color:#dc3545;line-height:1">⚠️</div>
-      <div>
-        <div style="font-weight:700;font-size:1.1rem;color:#dc3545;margin-bottom:8px">IMPORTANT DISCLAIMER</div>
-        <div style="font-size:0.85rem;line-height:1.7;color:#856404">
-          <strong>For informational purposes only.</strong> The gold and silver prices displayed on this website are indicative rates based on international LBMA spot prices with estimated India market premiums. These rates are <strong>NOT guaranteed</strong> and may differ significantly from actual retail prices.<br><br>
-          <strong>Always verify current rates</strong> with authorized dealers, banks, or jewelers before making any purchase, sale, or investment decisions. Prices vary by location, purity, dealer, and market conditions.<br><br>
-          <strong>No liability:</strong> The publisher assumes no responsibility for any financial losses, damages, or decisions made based on information from this website. Users are solely responsible for verifying all information independently.<br><br>
-          <strong>Not financial advice:</strong> This is not investment advice, trading advice, or a recommendation to buy or sell precious metals.
-        </div>
+  <div style="background:#fff3cd;border:2px solid #dc3545;border-radius:8px;padding:12px 16px;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:1.5rem;color:#dc3545">⚠️</span>
+      <div style="font-size:0.85rem;line-height:1.6;color:#856404">
+        <strong style="color:#dc3545">DISCLAIMER:</strong> Indicative prices only. <strong>Verify with dealers before any transaction.</strong> No liability for losses or decisions based on this data. Not financial advice.
       </div>
     </div>
   </div>
 
   <h1>Gold & Silver Price Tracker</h1>
-  <p class="subtitle">India Market Prices (INR) • 5-Year Charts • Updated Daily</p>
+  <p class="subtitle">India Market Prices (INR) • 5-Year Charts • Current as of Apr 19, 2026</p>
 
   <div class="grid">
     <div class="card gold">
@@ -193,7 +187,7 @@ async function fetchLBMAData() {
       usdInr: 93         // USD to INR exchange rate (April 2026)
     },
     historical: [
-      // 5 years monthly LBMA data (April 2021 - April 2026)
+      // 5 years monthly LBMA data (April 2021 - April 19, 2026)
       {date:'2021-04',gold:1790,silver:26.0},
       {date:'2021-07',gold:1800,silver:26.5},
       {date:'2021-10',gold:1795,silver:24.0},
@@ -214,7 +208,7 @@ async function fetchLBMAData() {
       {date:'2025-07',gold:3642,silver:47.0},
       {date:'2025-10',gold:4225,silver:66.0},
       {date:'2026-01',gold:4325,silver:72.5},
-      {date:'2026-04',gold:4868,silver:81.5}
+      {date:'2026-04-19',gold:4868,silver:81.5}
     ]
   };
 }
@@ -276,9 +270,18 @@ function drawChart(canvasId, data, label, color, isGold) {
   const ctx = document.getElementById(canvasId).getContext('2d');
   
   const labels = data.map(d => {
-    const [year, month] = d.date.split('-');
+    const dateParts = d.date.split('-');
     const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return `${monthNames[parseInt(month)-1]} '${year.slice(2)}`;
+    
+    if (dateParts.length === 3) {
+      // Daily format: 2026-04-19
+      const [year, month, day] = dateParts;
+      return `${monthNames[parseInt(month)-1]} ${day}, '${year.slice(2)}`;
+    } else {
+      // Monthly format: 2026-04
+      const [year, month] = dateParts;
+      return `${monthNames[parseInt(month)-1]} '${year.slice(2)}`;
+    }
   });
   
   const prices = data.map(d => (isGold ? d.goldPerGram : d.silverPerKg).toFixed(2));
@@ -327,9 +330,18 @@ function drawChart(canvasId, data, label, color, isGold) {
               // Show full date
               const dataIndex = context[0].dataIndex;
               const dateStr = data[dataIndex].date;
-              const [year, month] = dateStr.split('-');
+              const dateParts = dateStr.split('-');
               const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-              return `${monthNames[parseInt(month)-1]} ${year}`;
+              
+              if (dateParts.length === 3) {
+                // Daily format: 2026-04-19
+                const [year, month, day] = dateParts;
+                return `${monthNames[parseInt(month)-1]} ${parseInt(day)}, ${year}`;
+              } else {
+                // Monthly format: 2026-04
+                const [year, month] = dateParts;
+                return `${monthNames[parseInt(month)-1]} ${year}`;
+              }
             },
             label: c => '₹' + Math.round(parseFloat(c.raw)).toLocaleString('en-IN')
           }
@@ -337,18 +349,41 @@ function drawChart(canvasId, data, label, color, isGold) {
       },
       scales: {
         x: {
-          grid: {display: false},
+          grid: {
+            display: true,
+            color: '#f0f0f0',
+            drawTicks: true
+          },
           ticks: {
             color: '#666',
-            font: {size: 11},
-            maxRotation: 0,
+            font: function(context) {
+              // Make first occurrence of each year bold
+              const currentIndex = context.index;
+              const currentData = data[currentIndex];
+              
+              if (currentIndex === 0) return {size: 11, weight: 'bold'};
+              
+              const currentYear = currentData.date.split('-')[0];
+              const prevYear = data[currentIndex - 1].date.split('-')[0];
+              
+              // Bold if it's a new year
+              if (currentYear !== prevYear) {
+                return {size: 11, weight: 'bold'};
+              }
+              return {size: 11, weight: 'normal'};
+            },
+            maxRotation: 45,
+            minRotation: 45,
             autoSkip: true,
-            maxTicksLimit: 10
+            maxTicksLimit: 12
           }
         },
         y: {
           position: 'right',
-          grid: {color: '#f0f0f0'},
+          grid: {
+            color: '#e0e0e0',
+            drawTicks: true
+          },
           ticks: {
             color: '#666',
             font: {size: 11},
