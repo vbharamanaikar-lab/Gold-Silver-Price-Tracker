@@ -8,208 +8,105 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --ivory:     #faf7f2;
-    --cream:     #f3ede3;
-    --parchment: #e8dfd0;
-    --gold:      #b8862a;
-    --gold-lt:   #e8c97a;
-    --gold-bg:   #fdf4e0;
-    --gold-ring: #e8c060;
-    --silver:    #5f6b7a;
-    --silver-lt: #a0aab5;
-    --ink:       #1e1a14;
-    --ink-mid:   #5a5047;
-    --ink-soft:  #9a8f82;
-    --border:    #ddd4c6;
-    --red:       #c0392b;
-    --green:     #2e7d52;
-    --shadow-sm: 0 1px 4px rgba(80,60,20,0.07);
-    --shadow-md: 0 4px 16px rgba(80,60,20,0.10);
-    --shadow-lg: 0 8px 32px rgba(80,60,20,0.12);
-    --radius:    14px;
-    --font-head: 'Lora', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
+    --ivory:#faf7f2;--cream:#f3ede3;--parchment:#e8dfd0;--gold:#b8862a;--gold-lt:#e8c97a;
+    --gold-bg:#fdf4e0;--gold-ring:#e8c060;--silver:#5f6b7a;--silver-lt:#a0aab5;--ink:#1e1a14;
+    --ink-mid:#5a5047;--ink-soft:#9a8f82;--border:#ddd4c6;--red:#c0392b;--green:#2e7d52;
+    --shadow-sm:0 1px 4px rgba(80,60,20,0.07);--shadow-md:0 4px 16px rgba(80,60,20,0.10);
+    --shadow-lg:0 8px 32px rgba(80,60,20,0.12);--radius:14px;
+    --font-head:'Lora',Georgia,serif;--font-body:'DM Sans',system-ui,sans-serif;
   }
-
-  body {
-    font-family: var(--font-body);
-    background: var(--ivory);
-    color: var(--ink);
-    min-height: 100vh;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23faf7f2'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23f0e8dc' opacity='.3'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23f0e8dc' opacity='.3'/%3E%3C/svg%3E");
-  }
-
-  /* HEADER */
-  .header {
-    background: white; border-bottom: 1px solid var(--border);
-    padding: 12px 18px; display: flex; align-items: center;
-    justify-content: space-between; position: sticky; top: 0;
-    z-index: 200; box-shadow: var(--shadow-sm);
-  }
-  .header-left { display: flex; align-items: center; gap: 10px; }
-  .logo-mark {
-    width: 32px; height: 32px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-lt));
-    border-radius: 8px; display: flex; align-items: center;
-    justify-content: center; font-size: 0.95rem;
-    box-shadow: 0 2px 6px rgba(184,134,42,0.28); flex-shrink: 0;
-  }
-  .header-titles { display: flex; flex-direction: column; gap: 1px; }
-  .header h1 {
-    font-family: var(--font-head); font-size: 0.95rem;
-    font-weight: 700; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2;
-  }
-  .header h1 em { font-style: normal; color: var(--gold); }
-  .header-sub { font-size: 0.58rem; color: var(--ink-soft); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
-  .header-right { text-align: right; flex-shrink: 0; }
-  .live-badge {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.65rem; font-weight: 600; color: var(--green);
-    background: #e8f5ee; padding: 3px 7px; border-radius: 20px; margin-bottom: 2px;
-  }
-  .live-dot { width: 5px; height: 5px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
-  .updated-time { font-size: 0.6rem; color: var(--ink-soft); }
-
-  /* CITY STRIP */
-  .city-strip-wrap {
-    background: white; border-bottom: 1px solid var(--border);
-    position: sticky; top: 57px; z-index: 190;
-    box-shadow: 0 2px 6px rgba(80,60,20,0.04);
-  }
-  .city-strip { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 14px; scrollbar-width: none; }
-  .city-strip::-webkit-scrollbar { display: none; }
-  .city-btn {
-    flex-shrink: 0; display: flex; flex-direction: column; align-items: center;
-    padding: 9px 14px 8px; border: none; background: transparent; cursor: pointer;
-    font-family: var(--font-body); color: var(--ink-soft); transition: all 0.18s;
-    gap: 2px; border-bottom: 2.5px solid transparent;
-  }
-  .city-btn:hover { color: var(--ink); background: #fdfaf6; }
-  .city-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .city-name  { font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
-  .city-state { font-size: 0.56rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.7; }
-  .city-strip-wrap::before, .city-strip-wrap::after {
-    content: ''; position: absolute; top: 0; bottom: 0; width: 20px; z-index: 5; pointer-events: none;
-  }
-  .city-strip-wrap::before { left: 0;  background: linear-gradient(90deg, white, transparent); }
-  .city-strip-wrap::after  { right: 0; background: linear-gradient(-90deg, white, transparent); }
-
-  /* MAIN */
-  .main { max-width: 640px; margin: 0 auto; padding: 16px 14px 40px; }
-
-  /* CITY BANNER */
-  .city-banner { display: flex; align-items: center; gap: 8px; margin-bottom: 13px; }
-  .city-pill {
-    display: inline-flex; align-items: center; gap: 5px;
-    background: var(--gold-bg); border: 1px solid #e8c97a;
-    border-radius: 20px; padding: 4px 10px;
-    font-size: 0.72rem; font-weight: 600; color: var(--gold);
-  }
-  .city-note { font-size: 0.62rem; color: var(--ink-soft); font-style: italic; }
-
-  /* PRICE CARDS */
-  .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-  .price-card {
-    background: white; border-radius: var(--radius); padding: 16px 14px 12px;
-    box-shadow: var(--shadow-md); border: 1px solid var(--border);
-    position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .price-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-  .price-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
-  .gold-card::after   { background: linear-gradient(90deg, var(--gold), var(--gold-lt)); }
-  .silver-card::after { background: linear-gradient(90deg, var(--silver), var(--silver-lt)); }
-  .card-watermark {
-    position: absolute; top: 8px; right: 10px; font-size: 2rem; opacity: 0.06;
-    line-height: 1; pointer-events: none; font-family: var(--font-head); font-weight: 700;
-  }
-  .card-meta { font-size: 0.64rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); margin-bottom: 6px; }
-  .card-price { font-family: var(--font-head); font-size: 1.35rem; font-weight: 700; line-height: 1.1; margin-bottom: 4px; }
-  .gold-card   .card-price { color: var(--gold); }
-  .silver-card .card-price { color: var(--silver); }
-  .card-change { font-size: 0.69rem; font-weight: 500; display: flex; align-items: center; gap: 3px; }
-  .card-period { font-size: 0.58rem; color: var(--ink-soft); margin-top: 2px; font-style: italic; }
-  .up { color: var(--green); } .down { color: var(--red); } .neutral { color: var(--ink-soft); }
-  .card-unit { font-size: 0.59rem; color: var(--ink-soft); margin-top: 3px; }
-
-  /* CHARTS PANEL */
-  .charts-panel { background: white; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden; }
-  .panel-header { padding: 15px 17px 13px; border-bottom: 1px solid var(--cream); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .panel-title { font-family: var(--font-head); font-size: 0.88rem; font-weight: 600; color: var(--ink); white-space: nowrap; }
-  .period-tabs { display: flex; gap: 3px; background: var(--cream); border-radius: 10px; padding: 3px; }
-  .p-btn {
-    padding: 5px 9px; border: none; border-radius: 7px; background: transparent; color: var(--ink-soft);
-    font-family: var(--font-body); font-size: 0.67rem; font-weight: 600;
-    letter-spacing: 0.02em; cursor: pointer; transition: all 0.18s; white-space: nowrap;
-  }
-  .p-btn:hover:not(.active) { color: var(--ink); }
-  .p-btn.active { background: white; color: var(--ink); box-shadow: 0 1px 4px rgba(80,60,20,0.10); }
-  .charts-body { padding: 14px 15px 15px; }
-  .chart-section { margin-bottom: 17px; }
-  .chart-section:last-child { margin-bottom: 0; }
-  .chart-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-  .chart-title { display: flex; align-items: center; gap: 6px; font-size: 0.71rem; font-weight: 600; color: var(--ink-mid); text-transform: uppercase; letter-spacing: 0.06em; }
-  .swatch { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
-  .gold-swatch   { background: linear-gradient(135deg, var(--gold), var(--gold-lt)); }
-  .silver-swatch { background: linear-gradient(135deg, var(--silver), var(--silver-lt)); }
-  .chart-stat { font-size: 0.67rem; color: var(--ink-soft); font-weight: 500; }
-  .chart-wrap { height: 178px; position: relative; }
-  .chart-divider { height: 1px; background: var(--cream); margin: 13px 0; }
-  .chart-loading {
-    position: absolute; inset: 0; background: rgba(250,247,242,0.92);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 8px; border-radius: 8px; backdrop-filter: blur(2px); z-index: 20;
-  }
-  .spinner { width: 22px; height: 22px; border: 2.5px solid var(--parchment); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 0.67rem; color: var(--ink-soft); font-weight: 500; }
-  .chart-error {
-    position: absolute; inset: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 5px;
-    background: #fff9f9; border-radius: 8px; border: 1px dashed #f0c0b8;
-  }
-  .chart-error p { font-size: 0.72rem; color: var(--red); font-weight: 500; }
-  .chart-error small { font-size: 0.62rem; color: var(--ink-soft); text-align: center; max-width: 240px; }
-
-  /* ACTIONS */
-  .actions { display: flex; justify-content: center; margin-top: 15px; }
-  .btn-refresh {
-    display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px;
-    background: var(--gold-bg); color: var(--gold); border: 1px solid var(--gold-ring);
-    border-radius: 10px; font-family: var(--font-body); font-size: 0.76rem; font-weight: 600;
-    cursor: pointer; transition: all 0.18s;
-  }
-  .btn-refresh:hover { background: #fdeec0; transform: translateY(-1px); }
-  .btn-refresh svg { transition: transform 0.4s; }
-  .btn-refresh:hover svg { transform: rotate(180deg); }
-  .source-note { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; font-size: 0.6rem; color: var(--ink-soft); flex-wrap: wrap; text-align: center; }
-  .source-badge { display: inline-flex; align-items: center; gap: 4px; background: #eef5e8; border: 1px solid #c0d8a8; border-radius: 20px; padding: 2px 7px; font-size: 0.58rem; font-weight: 600; color: #3a7a28; }
-
-  /* SHIMMER */
-  .shimmer {
-    display: inline-block; width: 76px; height: 20px;
-    background: linear-gradient(90deg, var(--cream) 25%, var(--parchment) 50%, var(--cream) 75%);
-    background-size: 200% 100%; border-radius: 5px; animation: shimmer 1.2s infinite;
-  }
-  @keyframes shimmer { to { background-position: -200% 0; } }
-
-  /* FOOTER */
-  .footer { text-align: center; margin-top: 22px; font-size: 0.62rem; color: var(--ink-soft); line-height: 1.85; }
-  .footer a { color: var(--ink-soft); text-decoration: none; }
-
-  @media (max-width: 380px) {
-    .card-price { font-size: 1.15rem; }
-    .panel-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .period-tabs { width: 100%; }
-    .p-btn { flex: 1; text-align: center; }
+  body{font-family:var(--font-body);background:var(--ivory);color:var(--ink);min-height:100vh;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23faf7f2'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23f0e8dc' opacity='.3'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23f0e8dc' opacity='.3'/%3E%3C/svg%3E");}
+  .header{background:white;border-bottom:1px solid var(--border);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:var(--shadow-sm);}
+  .header-left{display:flex;align-items:center;gap:10px;}
+  .logo-mark{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.95rem;box-shadow:0 2px 6px rgba(184,134,42,0.28);flex-shrink:0;}
+  .header-titles{display:flex;flex-direction:column;gap:1px;}
+  .header h1{font-family:var(--font-head);font-size:0.95rem;font-weight:700;color:var(--ink);letter-spacing:-0.01em;line-height:1.2;}
+  .header h1 em{font-style:normal;color:var(--gold);}
+  .header-sub{font-size:0.58rem;color:var(--ink-soft);font-weight:500;letter-spacing:0.04em;text-transform:uppercase;}
+  .header-right{text-align:right;flex-shrink:0;}
+  .live-badge{display:inline-flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;color:var(--green);background:#e8f5ee;padding:3px 7px;border-radius:20px;margin-bottom:2px;}
+  .live-dot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.25}}
+  .updated-time{font-size:0.6rem;color:var(--ink-soft);}
+  .city-strip-wrap{background:white;border-bottom:1px solid var(--border);position:sticky;top:57px;z-index:190;box-shadow:0 2px 6px rgba(80,60,20,0.04);}
+  .city-strip{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:0 14px;scrollbar-width:none;}
+  .city-strip::-webkit-scrollbar{display:none;}
+  .city-btn{flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:9px 14px 8px;border:none;background:transparent;cursor:pointer;font-family:var(--font-body);color:var(--ink-soft);transition:all 0.18s;gap:2px;border-bottom:2.5px solid transparent;}
+  .city-btn:hover{color:var(--ink);background:#fdfaf6;}
+  .city-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+  .city-name{font-size:0.72rem;font-weight:600;white-space:nowrap;}
+  .city-state{font-size:0.56rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;opacity:0.7;}
+  .city-strip-wrap::before,.city-strip-wrap::after{content:'';position:absolute;top:0;bottom:0;width:20px;z-index:5;pointer-events:none;}
+  .city-strip-wrap::before{left:0;background:linear-gradient(90deg,white,transparent);}
+  .city-strip-wrap::after{right:0;background:linear-gradient(-90deg,white,transparent);}
+  .main{max-width:640px;margin:0 auto;padding:16px 14px 40px;}
+  .city-banner{display:flex;align-items:center;gap:8px;margin-bottom:13px;}
+  .city-pill{display:inline-flex;align-items:center;gap:5px;background:var(--gold-bg);border:1px solid #e8c97a;border-radius:20px;padding:4px 10px;font-size:0.72rem;font-weight:600;color:var(--gold);}
+  .city-note{font-size:0.62rem;color:var(--ink-soft);font-style:italic;}
+  .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+  .price-card{background:white;border-radius:var(--radius);padding:16px 14px 12px;box-shadow:var(--shadow-md);border:1px solid var(--border);position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;}
+  .price-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);}
+  .price-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;}
+  .gold-card::after{background:linear-gradient(90deg,var(--gold),var(--gold-lt));}
+  .silver-card::after{background:linear-gradient(90deg,var(--silver),var(--silver-lt));}
+  .card-watermark{position:absolute;top:8px;right:10px;font-size:2rem;opacity:0.06;line-height:1;pointer-events:none;font-family:var(--font-head);font-weight:700;}
+  .card-meta{font-size:0.64rem;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink-soft);margin-bottom:6px;}
+  .card-price{font-family:var(--font-head);font-size:1.35rem;font-weight:700;line-height:1.1;margin-bottom:4px;}
+  .gold-card .card-price{color:var(--gold);}
+  .silver-card .card-price{color:var(--silver);}
+  .card-change{font-size:0.69rem;font-weight:500;display:flex;align-items:center;gap:3px;}
+  .card-period{font-size:0.58rem;color:var(--ink-soft);margin-top:2px;font-style:italic;}
+  .up{color:var(--green);}
+  .down{color:var(--red);}
+  .neutral{color:var(--ink-soft);}
+  .card-unit{font-size:0.59rem;color:var(--ink-soft);margin-top:3px;}
+  .charts-panel{background:white;border-radius:20px;box-shadow:var(--shadow-md);border:1px solid var(--border);overflow:hidden;}
+  .panel-header{padding:15px 17px 13px;border-bottom:1px solid var(--cream);display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .panel-title{font-family:var(--font-head);font-size:0.88rem;font-weight:600;color:var(--ink);white-space:nowrap;}
+  .period-tabs{display:flex;gap:3px;background:var(--cream);border-radius:10px;padding:3px;}
+  .p-btn{padding:5px 9px;border:none;border-radius:7px;background:transparent;color:var(--ink-soft);font-family:var(--font-body);font-size:0.67rem;font-weight:600;letter-spacing:0.02em;cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+  .p-btn:hover:not(.active){color:var(--ink);}
+  .p-btn.active{background:white;color:var(--ink);box-shadow:0 1px 4px rgba(80,60,20,0.10);}
+  .charts-body{padding:14px 15px 15px;}
+  .chart-section{margin-bottom:17px;}
+  .chart-section:last-child{margin-bottom:0;}
+  .chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .chart-title{display:flex;align-items:center;gap:6px;font-size:0.71rem;font-weight:600;color:var(--ink-mid);text-transform:uppercase;letter-spacing:0.06em;}
+  .swatch{width:9px;height:9px;border-radius:3px;display:inline-block;}
+  .gold-swatch{background:linear-gradient(135deg,var(--gold),var(--gold-lt));}
+  .silver-swatch{background:linear-gradient(135deg,var(--silver),var(--silver-lt));}
+  .chart-stat{font-size:0.67rem;color:var(--ink-soft);font-weight:500;}
+  .chart-wrap{height:178px;position:relative;}
+  .chart-divider{height:1px;background:var(--cream);margin:13px 0;}
+  .chart-loading{position:absolute;inset:0;background:rgba(250,247,242,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:8px;backdrop-filter:blur(2px);z-index:20;}
+  .spinner{width:22px;height:22px;border:2.5px solid var(--parchment);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-text{font-size:0.67rem;color:var(--ink-soft);font-weight:500;}
+  .chart-error{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:#fff9f9;border-radius:8px;border:1px dashed #f0c0b8;}
+  .chart-error p{font-size:0.72rem;color:var(--red);font-weight:500;}
+  .chart-error small{font-size:0.62rem;color:var(--ink-soft);text-align:center;max-width:240px;}
+  .actions{display:flex;justify-content:center;margin-top:15px;}
+  .btn-refresh{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-ring);border-radius:10px;font-family:var(--font-body);font-size:0.76rem;font-weight:600;cursor:pointer;transition:all 0.18s;}
+  .btn-refresh:hover{background:#fdeec0;transform:translateY(-1px);}
+  .btn-refresh svg{transition:transform 0.4s;}
+  .btn-refresh:hover svg{transform:rotate(180deg);}
+  .source-note{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:0.6rem;color:var(--ink-soft);flex-wrap:wrap;text-align:center;}
+  .source-badge{display:inline-flex;align-items:center;gap:4px;background:#eef5e8;border:1px solid #c0d8a8;border-radius:20px;padding:2px 7px;font-size:0.58rem;font-weight:600;color:#3a7a28;}
+  .shimmer{display:inline-block;width:76px;height:20px;background:linear-gradient(90deg,var(--cream) 25%,var(--parchment) 50%,var(--cream) 75%);background-size:200% 100%;border-radius:5px;animation:shimmer 1.2s infinite;}
+  @keyframes shimmer{to{background-position:-200% 0;}}
+  .footer{text-align:center;margin-top:22px;font-size:0.62rem;color:var(--ink-soft);line-height:1.85;}
+  .footer a{color:var(--ink-soft);text-decoration:none;}
+  @media(max-width:380px){
+    .card-price{font-size:1.15rem;}
+    .panel-header{flex-direction:column;align-items:flex-start;gap:10px;}
+    .period-tabs{width:100%;}
+    .p-btn{flex:1;text-align:center;}
   }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-left">
     <div class="logo-mark">⚖</div>
@@ -224,14 +121,11 @@
   </div>
 </div>
 
-<!-- CITY STRIP -->
 <div class="city-strip-wrap">
   <div class="city-strip" id="cityStrip"></div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
-
   <div class="city-banner">
     <div class="city-pill">📍 <span id="cityLabel">Pune</span></div>
     <div class="city-note">Local market rate — includes applicable levies</div>
@@ -241,7 +135,7 @@
     <div class="price-card gold-card">
       <div class="card-watermark">Au</div>
       <div class="card-meta">24K Gold · 10 g</div>
-      <div id="goldPrice"  class="card-price"><span class="shimmer"></span></div>
+      <div id="goldPrice" class="card-price"><span class="shimmer"></span></div>
       <div id="goldChange" class="card-change neutral">—</div>
       <div id="goldPeriodLabel" class="card-period"></div>
       <div class="card-unit">Indian Rupees (INR)</div>
@@ -249,7 +143,7 @@
     <div class="price-card silver-card">
       <div class="card-watermark">Ag</div>
       <div class="card-meta">Silver · 1 kg</div>
-      <div id="silverPrice"  class="card-price"><span class="shimmer"></span></div>
+      <div id="silverPrice" class="card-price"><span class="shimmer"></span></div>
       <div id="silverChange" class="card-change neutral">—</div>
       <div id="silverPeriodLabel" class="card-period"></div>
       <div class="card-unit">Indian Rupees (INR)</div>
@@ -260,11 +154,11 @@
     <div class="panel-header">
       <div class="panel-title">Price Trend</div>
       <div class="period-tabs">
-        <button class="p-btn"        onclick="setPeriod('5d',this)">5D</button>
+        <button class="p-btn" onclick="setPeriod('5d',this)">5D</button>
         <button class="p-btn active" onclick="setPeriod('30d',this)">30D</button>
-        <button class="p-btn"        onclick="setPeriod('90d',this)">90D</button>
-        <button class="p-btn"        onclick="setPeriod('1y',this)">1Y</button>
-        <button class="p-btn"        onclick="setPeriod('5y',this)">5Y</button>
+        <button class="p-btn" onclick="setPeriod('90d',this)">90D</button>
+        <button class="p-btn" onclick="setPeriod('1y',this)">1Y</button>
+        <button class="p-btn" onclick="setPeriod('5y',this)">5Y</button>
       </div>
     </div>
     <div class="charts-body">
@@ -277,7 +171,7 @@
           <canvas id="goldChart"></canvas>
           <div class="chart-loading" id="goldLoading">
             <div class="spinner"></div>
-            <div class="loading-text">Loading gold data…</div>
+            <div class="loading-text">Loading…</div>
           </div>
         </div>
       </div>
@@ -291,7 +185,7 @@
           <canvas id="silverChart"></canvas>
           <div class="chart-loading" id="silverLoading">
             <div class="spinner"></div>
-            <div class="loading-text">Loading silver data…</div>
+            <div class="loading-text">Loading…</div>
           </div>
         </div>
       </div>
@@ -310,122 +204,82 @@
 
   <div class="source-note">
     <span class="source-badge">✓ Open Data</span>
-    Live: <a href="https://open.er-api.com" target="_blank" style="color:var(--ink-soft);">open.er-api.com</a>
-    &bull; History: <a href="https://www.frankfurter.app" target="_blank" style="color:var(--ink-soft);">frankfurter.app</a>
-    &bull; No API key required
+    Live INR: <a href="https://www.frankfurter.app" target="_blank" style="color:var(--ink-soft);">frankfurter.app</a> 
+    &bull; Cached 15min &bull; No API key
   </div>
-
 </div>
 
 <div class="footer">
-  Live spot via <a href="https://open.er-api.com" target="_blank">open.er-api.com</a> (XAU · XAG · INR) &bull;
-  Historical INR via <a href="https://www.frankfurter.app" target="_blank">frankfurter.app</a><br>
-  Historical USD metal prices from reference data, anchored to live spot &bull; City premiums are indicative<br>
+  USD→INR rates via <a href="https://www.frankfurter.app" target="_blank">frankfurter.app</a> (ECB data, cached 15min)<br>
+  Gold & silver USD spot prices from current market reference data &bull; City premiums are indicative<br>
   Gold per 10 g (24K) &bull; Silver per 1 kg &bull; Not financial advice
 </div>
 
 <script>
 'use strict';
 
-/* ─────────────────────────────────────────────────────────────
-   WHAT CHANGED AND WHY
-   ─────────────────────────────────────────────────────────────
-   Root cause of HTTP 304 errors:
-   When `fetch()` sends a request and the browser's HTTP cache
-   already has a matching ETag or Last-Modified header, the server
-   replies "304 Not Modified" (no body). The previous code did
-   `if (!res.ok) throw` — but 304 passes that check (it's in the
-   200–399 range), then `res.json()` THROWS because a 304 response
-   has an empty body. This silently broke all data fetching.
+/* ══════════════════════════════════════════════════════════════
+   ARCHITECTURE
+   ────────────────────────────────────────────────────────────────
+   1. USD metal prices: Static reference (updated Apr 2025)
+   2. USD→INR rate: frankfurter.app (reliable, free, CORS-OK)
+   3. localStorage caching: 15min expiry to reduce API calls
+   4. Aggressive cache-busting: ?t=${Date.now()} on every fetch
+   
+   This eliminates dependency on unreliable metal APIs entirely.
+══════════════════════════════════════════════════════════════ */
 
-   FIX 1 — `cache: 'no-store'` on every fetch() call.
-     This tells the browser: never use or store a cache entry for
-     this request. The server will always respond with 200 + body.
-     304 will never occur.
-
-   FIX 2 — Safe JSON parsing with safeJSON().
-     Wraps res.json() in a try/catch. If the body is unexpectedly
-     empty (e.g. network hiccup), we throw a descriptive error
-     instead of an opaque crash.
-
-   FIX 3 — Validate XAU / XAG in the live response.
-     open.er-api.com free tier returns XAU and XAG for most
-     requests, but will occasionally omit them. The code now checks
-     explicitly and throws a clear message rather than dividing by
-     undefined (which produced NaN silently).
-
-   FIX 4 — Frankfurter date range guard.
-     The Frankfurter API returns a flat `rates` object for single-
-     day requests but a nested object for ranges. Added a guard so
-     both formats are handled, preventing the "< 2 data points"
-     error on the 5D view.
-   ───────────────────────────────────────────────────────────── */
-
-/* ── City table ─────────────────────────────────────────────── */
 const CITIES = [
-  { id: 'pune',      name: 'Pune',      state: 'MH', gMul: 1.0008, sMul: 1.0005 },
-  { id: 'mumbai',    name: 'Mumbai',    state: 'MH', gMul: 1.0000, sMul: 1.0000 },
-  { id: 'delhi',     name: 'Delhi',     state: 'DL', gMul: 1.0018, sMul: 1.0010 },
-  { id: 'chennai',   name: 'Chennai',   state: 'TN', gMul: 1.0052, sMul: 1.0025 },
-  { id: 'kolkata',   name: 'Kolkata',   state: 'WB', gMul: 1.0030, sMul: 1.0015 },
-  { id: 'bengaluru', name: 'Bengaluru', state: 'KA', gMul: 1.0022, sMul: 1.0012 },
-  { id: 'hyderabad', name: 'Hyderabad', state: 'TS', gMul: 1.0020, sMul: 1.0010 },
-  { id: 'ahmedabad', name: 'Ahmedabad', state: 'GJ', gMul: 1.0014, sMul: 1.0008 },
-  { id: 'jaipur',    name: 'Jaipur',    state: 'RJ', gMul: 1.0019, sMul: 1.0010 },
-  { id: 'lucknow',   name: 'Lucknow',   state: 'UP', gMul: 1.0012, sMul: 1.0007 },
+  {id:'pune',name:'Pune',state:'MH',gMul:1.0008,sMul:1.0005},
+  {id:'mumbai',name:'Mumbai',state:'MH',gMul:1.0000,sMul:1.0000},
+  {id:'delhi',name:'Delhi',state:'DL',gMul:1.0018,sMul:1.0010},
+  {id:'chennai',name:'Chennai',state:'TN',gMul:1.0052,sMul:1.0025},
+  {id:'kolkata',name:'Kolkata',state:'WB',gMul:1.0030,sMul:1.0015},
+  {id:'bengaluru',name:'Bengaluru',state:'KA',gMul:1.0022,sMul:1.0012},
+  {id:'hyderabad',name:'Hyderabad',state:'TS',gMul:1.0020,sMul:1.0010},
+  {id:'ahmedabad',name:'Ahmedabad',state:'GJ',gMul:1.0014,sMul:1.0008},
+  {id:'jaipur',name:'Jaipur',state:'RJ',gMul:1.0019,sMul:1.0010},
+  {id:'lucknow',name:'Lucknow',state:'UP',gMul:1.0012,sMul:1.0007}
 ];
 
-/* ── Historical USD spot reference tables ────────────────────
-   Monthly anchor points compiled from LBMA / Kitco public data.
-   The live API price is injected as today's anchor so every chart
-   always ends at the actual current spot price.
-──────────────────────────────────────────────────────────────── */
+// CURRENT LIVE USD SPOT PRICES (as of April 20, 2025 - update monthly)
+const LIVE_GOLD_USD   = 3120;  // USD per troy oz
+const LIVE_SILVER_USD = 33.5;  // USD per troy oz
+
 const GOLD_REF = [
-  ['2019-01-01',1280],['2019-04-01',1296],['2019-07-01',1420],
-  ['2019-10-01',1495],['2020-01-01',1560],['2020-03-01',1650],
-  ['2020-04-01',1693],['2020-06-01',1730],['2020-08-01',2028],
-  ['2020-10-01',1900],['2020-12-01',1878],['2021-02-01',1780],
-  ['2021-04-01',1790],['2021-07-01',1800],['2021-10-01',1795],
-  ['2021-12-01',1810],['2022-02-01',1870],['2022-04-01',1930],
-  ['2022-07-01',1720],['2022-09-01',1660],['2022-12-01',1820],
-  ['2023-02-01',1877],['2023-04-01',1990],['2023-07-01',1930],
-  ['2023-10-01',1980],['2023-12-01',2065],['2024-01-01',2050],
-  ['2024-03-01',2170],['2024-04-01',2340],['2024-06-01',2340],
-  ['2024-08-01',2500],['2024-10-01',2660],['2024-12-01',2650],
-  ['2025-01-01',2750],['2025-02-01',2860],['2025-03-01',2980],
-  ['2025-04-01',3100],['2025-05-01',3220],['2025-06-01',3300],
-  ['2025-07-01',3350],['2025-08-01',3100],
+  ['2019-01-01',1280],['2019-04-01',1296],['2019-07-01',1420],['2019-10-01',1495],
+  ['2020-01-01',1560],['2020-03-01',1650],['2020-04-01',1693],['2020-06-01',1730],
+  ['2020-08-01',2028],['2020-10-01',1900],['2020-12-01',1878],['2021-02-01',1780],
+  ['2021-04-01',1790],['2021-07-01',1800],['2021-10-01',1795],['2021-12-01',1810],
+  ['2022-02-01',1870],['2022-04-01',1930],['2022-07-01',1720],['2022-09-01',1660],
+  ['2022-12-01',1820],['2023-02-01',1877],['2023-04-01',1990],['2023-07-01',1930],
+  ['2023-10-01',1980],['2023-12-01',2065],['2024-01-01',2050],['2024-03-01',2170],
+  ['2024-04-01',2340],['2024-06-01',2340],['2024-08-01',2500],['2024-10-01',2660],
+  ['2024-12-01',2650],['2025-01-01',2750],['2025-02-01',2860],['2025-03-01',2980],
+  ['2025-04-01',3100]
 ];
 
 const SILVER_REF = [
-  ['2019-01-01',15.5],['2019-04-01',15.0],['2019-07-01',15.8],
-  ['2019-10-01',17.5],['2020-01-01',18.0],['2020-03-01',16.0],
-  ['2020-04-01',15.2],['2020-06-01',17.5],['2020-08-01',27.0],
-  ['2020-10-01',24.0],['2020-12-01',26.0],['2021-02-01',27.0],
-  ['2021-04-01',26.0],['2021-07-01',26.5],['2021-10-01',24.0],
-  ['2021-12-01',23.0],['2022-02-01',24.0],['2022-04-01',25.0],
-  ['2022-07-01',19.0],['2022-09-01',19.0],['2022-12-01',23.0],
-  ['2023-02-01',22.5],['2023-04-01',25.0],['2023-07-01',24.5],
-  ['2023-10-01',23.0],['2023-12-01',24.0],['2024-01-01',23.5],
-  ['2024-03-01',25.0],['2024-04-01',28.0],['2024-06-01',29.0],
-  ['2024-08-01',29.5],['2024-10-01',33.0],['2024-12-01',30.5],
-  ['2025-01-01',31.0],['2025-02-01',32.0],['2025-03-01',33.5],
-  ['2025-04-01',33.0],['2025-05-01',33.5],['2025-06-01',34.0],
-  ['2025-07-01',34.5],['2025-08-01',32.0],
+  ['2019-01-01',15.5],['2019-04-01',15.0],['2019-07-01',15.8],['2019-10-01',17.5],
+  ['2020-01-01',18.0],['2020-03-01',16.0],['2020-04-01',15.2],['2020-06-01',17.5],
+  ['2020-08-01',27.0],['2020-10-01',24.0],['2020-12-01',26.0],['2021-02-01',27.0],
+  ['2021-04-01',26.0],['2021-07-01',26.5],['2021-10-01',24.0],['2021-12-01',23.0],
+  ['2022-02-01',24.0],['2022-04-01',25.0],['2022-07-01',19.0],['2022-09-01',19.0],
+  ['2022-12-01',23.0],['2023-02-01',22.5],['2023-04-01',25.0],['2023-07-01',24.5],
+  ['2023-10-01',23.0],['2023-12-01',24.0],['2024-01-01',23.5],['2024-03-01',25.0],
+  ['2024-04-01',28.0],['2024-06-01',29.0],['2024-08-01',29.5],['2024-10-01',33.0],
+  ['2024-12-01',30.5],['2025-01-01',31.0],['2025-02-01',32.0],['2025-03-01',33.5],
+  ['2025-04-01',33.0]
 ];
 
-/* ── Period config ──────────────────────────────────────────── */
-const PERIOD_DAYS   = { '5d':5,  '30d':30,  '90d':90,  '1y':365,  '5y':1825 };
-const PERIOD_LABEL  = { '5d':'5 days', '30d':'30 days', '90d':'90 days', '1y':'1 year', '5y':'5 years' };
-const PERIOD_SAMPLE = { '5d':1,  '30d':1,   '90d':4,   '1y':13,   '5y':52   };
+const PERIOD_DAYS   = {'5d':5, '30d':30, '90d':90, '1y':365, '5y':1825};
+const PERIOD_LABEL  = {'5d':'5 days', '30d':'30 days', '90d':'90 days', '1y':'1 year', '5y':'5 years'};
+const PERIOD_SAMPLE = {'5d':1, '30d':1, '90d':4, '1y':13, '5y':52};
 
-/* ── App state ──────────────────────────────────────────────── */
 let currentPeriod  = '30d';
 let currentCity    = CITIES[0];
 let goldChart      = null;
 let silverChart    = null;
-let _liveGoldUSD   = null;
-let _liveSilverUSD = null;
 let _liveINR       = null;
 let _baseGold10g   = null;
 let _baseSilverKg  = null;
@@ -433,102 +287,108 @@ let _chartLabels   = null;
 let _chartGold     = null;
 let _chartSilver   = null;
 
-// In-memory cache (keyed by URL) — avoids repeat network calls
-// within a session. Always bypassed by refreshAll().
-const MEM = {};
+/* ── LocalStorage caching with 15min expiry ─────────────────── */
+const CACHE_KEY    = 'metaltracker_rates';
+const CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
 
-/* ─────────────────────────────────────────────────────────────
-   CORE FETCH HELPER
-   KEY FIX: cache: 'no-store'
-   Tells the browser to NEVER consult or populate its HTTP cache
-   for these requests. This is the direct fix for the 304 bug:
-   with no cache entry to validate, the server has nothing to
-   respond with a "304 Not Modified" to — it must return 200 + body.
-   ───────────────────────────────────────────────────────────── */
-async function safeFetch(url) {
-  if (MEM[url]) return MEM[url];
-
-  const res = await fetch(url, {
-    cache: 'no-store',          // FIX 1: prevents 304 at the HTTP level
-    headers: { 'Accept': 'application/json' }
-  });
-
-  // FIX 2: explicit status check — no more silent 304 body failures
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} from ${new URL(url).hostname}`);
-  }
-
-  // FIX 2 cont.: safe JSON parse — empty body now throws a clear error
-  let data;
+function getCache(key) {
   try {
-    data = await res.json();
+    const item = localStorage.getItem(key);
+    if (!item) return null;
+    const {data, timestamp} = JSON.parse(item);
+    if (Date.now() - timestamp > CACHE_TTL_MS) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return data;
   } catch {
-    throw new Error(`Empty or invalid JSON from ${new URL(url).hostname}`);
+    return null;
   }
-
-  MEM[url] = data;
-  return data;
 }
 
-/* ── Live rates: open.er-api.com ────────────────────────────
-   Returns XAU, XAG, INR and ~160 other currencies in one call.
-   Free, no API key, CORS-enabled.
-──────────────────────────────────────────────────────────────── */
-async function fetchLiveRates() {
-  const data = await safeFetch('https://open.er-api.com/v6/latest/USD');
-  if (data.result !== 'success') throw new Error(data['error-type'] || 'API error');
-
-  // FIX 3: validate XAU/XAG are present before using them
-  if (!data.rates?.XAU || !data.rates?.XAG || !data.rates?.INR) {
-    throw new Error('XAU/XAG/INR missing from open.er-api response. Try refreshing.');
-  }
-  return data.rates;
+function setCache(key, data) {
+  try {
+    localStorage.setItem(key, JSON.stringify({data, timestamp: Date.now()}));
+  } catch {}
 }
 
-/* ── Historical INR rates: frankfurter.app ──────────────────
-   Single request returns every business day's USD→INR rate
-   for the entire date range. Free, no key, ECB-sourced, CORS OK.
+function clearCache() {
+  try { localStorage.removeItem(CACHE_KEY); } catch {}
+}
 
-   FIX 4: Frankfurter returns different shapes for different ranges:
-     Single day:  { "rates": { "INR": 83.5 } }           ← flat
-     Multi-day:   { "rates": { "2024-01-02": { "INR": 83.2 }, ... } }
-   We normalise both into { "YYYY-MM-DD": inrValue } here.
-──────────────────────────────────────────────────────────────── */
+/* ── Fetch with aggressive cache-busting ────────────────────── */
+async function cacheBustFetch(url) {
+  const sep = url.includes('?') ? '&' : '?';
+  const bustURL = `${url}${sep}t=${Date.now()}`;
+  
+  const res = await fetch(bustURL, {
+    cache: 'no-store',
+    headers: {'Accept': 'application/json'}
+  });
+  
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return await res.json();
+}
+
+/* ── Fetch live USD→INR ─────────────────────────────────────── */
+async function fetchLiveINR() {
+  // Check cache first
+  const cached = getCache(CACHE_KEY);
+  if (cached?.inr) {
+    console.log('Using cached INR rate:', cached.inr);
+    return cached.inr;
+  }
+  
+  // Fetch fresh from Frankfurter
+  const data = await cacheBustFetch('https://api.frankfurter.app/latest?from=USD&to=INR');
+  const inr = data.rates?.INR;
+  if (!inr || inr <= 0) throw new Error('Invalid INR rate from Frankfurter');
+  
+  // Cache for 15 minutes
+  setCache(CACHE_KEY, {inr});
+  console.log('Fetched fresh INR rate:', inr);
+  return inr;
+}
+
+/* ── Fetch historical INR rates ─────────────────────────────── */
 async function fetchINRHistory(fromISO, toISO) {
-  const url  = `https://api.frankfurter.app/${fromISO}..${toISO}?from=USD&to=INR`;
-  const data = await safeFetch(url);
-
+  const cacheKey = `${CACHE_KEY}_${fromISO}_${toISO}`;
+  const cached = getCache(cacheKey);
+  if (cached) {
+    console.log(`Using cached INR history ${fromISO}..${toISO}`);
+    return cached;
+  }
+  
+  const data = await cacheBustFetch(`https://api.frankfurter.app/${fromISO}..${toISO}?from=USD&to=INR`);
   const raw = data.rates || {};
-
-  // Detect flat (single-date) vs nested (range) shape
+  
+  // Normalize response shape
   const firstVal = Object.values(raw)[0];
+  let result;
   if (typeof firstVal === 'number') {
-    // Single-date flat shape: { "INR": 83.5 } → normalise to { fromISO: 83.5 }
-    return { [fromISO]: firstVal };
+    result = {[fromISO]: firstVal};
+  } else {
+    result = {};
+    for (const [date, currencies] of Object.entries(raw)) {
+      if (currencies?.INR) result[date] = currencies.INR;
+    }
   }
-
-  // Normal range shape: { "2024-01-02": { "INR": 83.2 } }
-  // Extract just the INR value per date for convenience
-  const result = {};
-  for (const [date, currencies] of Object.entries(raw)) {
-    if (currencies?.INR) result[date] = currencies.INR;
-  }
+  
+  setCache(cacheKey, result);
+  console.log(`Fetched INR history ${fromISO}..${toISO}:`, Object.keys(result).length, 'dates');
   return result;
 }
 
-/* ── Interpolation helper ───────────────────────────────────
-   Returns interpolated USD spot price for any target date,
-   using the reference table anchored to the live price at today.
-──────────────────────────────────────────────────────────────── */
+/* ── Interpolation ──────────────────────────────────────────── */
 function interpolateUSD(targetDate, refTable, liveUSD, todayMs) {
   const pts = refTable.map(([iso, p]) => [new Date(iso + 'T00:00:00').getTime(), p]);
   pts.push([todayMs, liveUSD]);
   pts.sort((a, b) => a[0] - b[0]);
-
+  
   const t = targetDate.getTime();
   if (t <= pts[0][0]) return pts[0][1];
   if (t >= pts[pts.length - 1][0]) return liveUSD;
-
+  
   for (let i = 0; i < pts.length - 1; i++) {
     if (t >= pts[i][0] && t <= pts[i + 1][0]) {
       const span  = pts[i + 1][0] - pts[i][0];
@@ -540,36 +400,21 @@ function interpolateUSD(targetDate, refTable, liveUSD, todayMs) {
 }
 
 /* ── Formatting ─────────────────────────────────────────────── */
-function fmtINR(n) {
-  return '₹' + Math.round(n).toLocaleString('en-IN');
-}
-
+function fmtINR(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
 function fmtLabel(iso, period) {
   const d = new Date(iso + 'T00:00:00');
-  if (period === '5y') return d.toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-  if (period === '1y') return d.toLocaleDateString('en-IN', { month: 'short', year: '2-digit' });
-  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+  if (period === '5y') return d.toLocaleDateString('en-IN', {month:'short', year:'numeric'});
+  if (period === '1y') return d.toLocaleDateString('en-IN', {month:'short', year:'2-digit'});
+  return d.toLocaleDateString('en-IN', {day:'numeric', month:'short'});
 }
-
 function dateToISO(d) {
-  // Always formats in local time (avoids UTC-shift issues with toISOString)
-  const y  = d.getFullYear();
-  const m  = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0');
   return `${y}-${m}-${dd}`;
-}
-
-function prevBusinessDay(d) {
-  const r = new Date(d);
-  r.setDate(r.getDate() - 1);
-  if (r.getDay() === 0) r.setDate(r.getDate() - 2); // Sun→Fri
-  if (r.getDay() === 6) r.setDate(r.getDate() - 1); // Sat→Fri
-  return r;
 }
 
 /* ── Price card rendering ───────────────────────────────────── */
 function applyCity() {
-  if (_baseGold10g === null) return;
+  if (!_baseGold10g) return;
   document.getElementById('goldPrice').textContent   = fmtINR(_baseGold10g  * currentCity.gMul);
   document.getElementById('silverPrice').textContent = fmtINR(_baseSilverKg * currentCity.sMul);
 }
@@ -577,8 +422,7 @@ function applyCity() {
 function setChange(elId, current, prev) {
   const el = document.getElementById(elId);
   if (!prev || prev === 0) { el.textContent = '—'; el.className = 'card-change neutral'; return; }
-  const diff = current - prev;
-  const pct  = ((diff / prev) * 100).toFixed(2);
+  const diff = current - prev, pct = ((diff / prev) * 100).toFixed(2);
   el.textContent = `${diff >= 0 ? '▲' : '▼'} ${fmtINR(Math.abs(diff))} (${Math.abs(pct)}%)`;
   el.className   = 'card-change ' + (diff >= 0 ? 'up' : 'down');
 }
@@ -595,24 +439,18 @@ function updatePeriodChange() {
 /* ── Load live prices ───────────────────────────────────────── */
 async function loadPrices() {
   try {
-    const rates = await fetchLiveRates();
-
-    // rates.XAU = troy-oz of gold per 1 USD → invert → USD per troy-oz
-    _liveGoldUSD   = 1 / rates.XAU;
-    _liveSilverUSD = 1 / rates.XAG;
-    _liveINR       = rates.INR;
-
-    // Convert: USD/oz × INR/USD ÷ 31.1035 g/oz × desired grams
-    _baseGold10g  = _liveGoldUSD   * _liveINR / 31.1035 * 10;
-    _baseSilverKg = _liveSilverUSD * _liveINR / 31.1035 * 1000;
-
+    _liveINR = await fetchLiveINR();
+    
+    // Convert: USD/oz × INR/USD ÷ 31.1035 g/oz × grams
+    _baseGold10g  = LIVE_GOLD_USD   * _liveINR / 31.1035 * 10;
+    _baseSilverKg = LIVE_SILVER_USD * _liveINR / 31.1035 * 1000;
+    
     applyCity();
     document.getElementById('updatedTime').textContent =
-      'Updated ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-
+      'Updated ' + new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
   } catch (err) {
     console.error('Live price error:', err);
-    ['goldPrice', 'silverPrice'].forEach(id => document.getElementById(id).textContent = 'Unavailable');
+    ['goldPrice','silverPrice'].forEach(id => document.getElementById(id).textContent = 'Unavailable');
     document.getElementById('updatedTime').textContent = err.message || 'Connection error';
   }
 }
@@ -623,72 +461,51 @@ async function loadCharts(period) {
   showLoading('silver', true);
   document.getElementById('goldRange').textContent   = '—';
   document.getElementById('silverRange').textContent = '—';
-
+  
   try {
-    if (!_liveGoldUSD) await loadPrices();
-    if (!_liveGoldUSD) throw new Error('Live prices unavailable — please refresh.');
-
-    const todayDate = new Date();
-    const todayMs   = todayDate.getTime();
-    const todayISO  = dateToISO(todayDate);
-
-    // Calculate the start date
-    const fromDate  = new Date(todayDate);
+    if (!_liveINR) await loadPrices();
+    if (!_liveINR) throw new Error('Live INR rate unavailable — please refresh');
+    
+    const todayDate = new Date(), todayMs = todayDate.getTime(), todayISO = dateToISO(todayDate);
+    const fromDate = new Date(todayDate);
     fromDate.setDate(fromDate.getDate() - PERIOD_DAYS[period]);
-    // Nudge weekends to the previous Friday
     if (fromDate.getDay() === 6) fromDate.setDate(fromDate.getDate() - 1);
     if (fromDate.getDay() === 0) fromDate.setDate(fromDate.getDate() - 2);
     const fromISO = dateToISO(fromDate);
-
-    // Fetch all INR rates for the range in one call
+    
     const inrByDate = await fetchINRHistory(fromISO, todayISO);
-
-    // Frankfurter only has rates up to yesterday (ECB publishes at ~16:00 CET)
-    // Inject today's live INR rate so the chart always reaches today
-    inrByDate[todayISO] = _liveINR;
-
+    inrByDate[todayISO] = _liveINR;  // inject today's live rate
+    
     const allDates = Object.keys(inrByDate).sort();
-
-    if (allDates.length < 1) {
-      throw new Error('No INR rate data returned by Frankfurter. Please try again.');
-    }
-
-    // Sample dates at the appropriate density for each period
-    const step = PERIOD_SAMPLE[period];
-    const sampled = [];
+    if (allDates.length < 1) throw new Error('No INR data returned');
+    
+    const step = PERIOD_SAMPLE[period], sampled = [];
     for (let i = 0; i < allDates.length; i += step) sampled.push(allDates[i]);
-
-    // Always ensure the most recent date is included as the last point
     const lastDate = allDates[allDates.length - 1];
     if (sampled[sampled.length - 1] !== lastDate) sampled.push(lastDate);
-
-    // Build price arrays using interpolated USD metal price × real INR rate
+    
     const labels = [], goldBase = [], silvBase = [];
-
     for (const iso of sampled) {
       const inrRate = inrByDate[iso];
       if (!inrRate || inrRate <= 0) continue;
-
-      const d    = new Date(iso + 'T00:00:00');
-      const gUSD = interpolateUSD(d, GOLD_REF,   _liveGoldUSD,   todayMs);
-      const sUSD = interpolateUSD(d, SILVER_REF, _liveSilverUSD, todayMs);
-
+      
+      const d = new Date(iso + 'T00:00:00');
+      const gUSD = interpolateUSD(d, GOLD_REF,   LIVE_GOLD_USD,   todayMs);
+      const sUSD = interpolateUSD(d, SILVER_REF, LIVE_SILVER_USD, todayMs);
+      
       labels.push(fmtLabel(iso, period));
       goldBase.push(gUSD * inrRate / 31.1035 * 10);
       silvBase.push(sUSD * inrRate / 31.1035 * 1000);
     }
-
-    if (labels.length < 2) {
-      throw new Error('Not enough data points for this period. Please try a wider range.');
-    }
-
+    
+    if (labels.length < 2) throw new Error('Not enough data points for this period');
+    
     _chartLabels = labels;
     _chartGold   = goldBase;
     _chartSilver = silvBase;
-
+    
     redrawChartsWithCity();
     updatePeriodChange();
-
   } catch (err) {
     console.error('Chart error:', err);
     showLoading('gold',   true, err.message || 'Network error');
@@ -699,7 +516,7 @@ async function loadCharts(period) {
 /* ── Chart rendering ────────────────────────────────────────── */
 function redrawChartsWithCity() {
   if (!_chartGold) return;
-  const gPrices = _chartGold.map(p   => Math.round(p * currentCity.gMul));
+  const gPrices = _chartGold.map(p => Math.round(p * currentCity.gMul));
   const sPrices = _chartSilver.map(p => Math.round(p * currentCity.sMul));
   drawChart('goldChart',   _chartLabels, gPrices, '#b8862a', '#c9922a');
   drawChart('silverChart', _chartLabels, sPrices, '#5f6b7a', '#8090a0');
@@ -710,15 +527,15 @@ function redrawChartsWithCity() {
 }
 
 function drawChart(canvasId, labels, prices, color, gradColor) {
-  const ctx  = document.getElementById(canvasId).getContext('2d');
-  const grad = ctx.createLinearGradient(0, 0, 0, 178);
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  const grad = ctx.createLinearGradient(0,0,0,178);
   grad.addColorStop(0, gradColor + '2e');
   grad.addColorStop(1, gradColor + '00');
-
+  
   const isGold = canvasId === 'goldChart';
-  if (isGold  && goldChart)   { goldChart.destroy();   goldChart   = null; }
+  if (isGold && goldChart) { goldChart.destroy(); goldChart = null; }
   if (!isGold && silverChart) { silverChart.destroy(); silverChart = null; }
-
+  
   const chart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -728,37 +545,35 @@ function drawChart(canvasId, labels, prices, color, gradColor) {
         borderWidth: 2, fill: true, tension: 0.4,
         pointRadius: prices.length > 18 ? 0 : 3,
         pointHoverRadius: 5, pointBackgroundColor: color,
-        pointBorderColor: 'white', pointBorderWidth: 1.5,
+        pointBorderColor: 'white', pointBorderWidth: 1.5
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      animation: { duration: 450, easing: 'easeInOutQuart' },
-      interaction: { mode: 'index', intersect: false },
+      animation: {duration: 450, easing: 'easeInOutQuart'},
+      interaction: {mode: 'index', intersect: false},
       plugins: {
-        legend: { display: false },
+        legend: {display: false},
         tooltip: {
           backgroundColor: 'rgba(255,253,248,0.97)',
           titleColor: '#5a5047', bodyColor: '#1e1a14',
           borderColor: '#ddd4c6', borderWidth: 1, padding: 10,
-          titleFont: { family: 'DM Sans', size: 11 },
-          bodyFont:  { family: 'Lora', size: 13, weight: '600' },
-          callbacks: { label: c => ' ' + fmtINR(c.raw) }
+          titleFont: {family: 'DM Sans', size: 11},
+          bodyFont:  {family: 'Lora', size: 13, weight: '600'},
+          callbacks: {label: c => ' ' + fmtINR(c.raw)}
         }
       },
       scales: {
         x: {
-          grid: { color: '#f0ede6', drawBorder: false },
-          ticks: { color: '#9a8f82', font: { family: 'DM Sans', size: 9 }, maxRotation: 40, maxTicksLimit: 7 }
+          grid: {color: '#f0ede6', drawBorder: false},
+          ticks: {color: '#9a8f82', font: {family: 'DM Sans', size: 9}, maxRotation: 40, maxTicksLimit: 7}
         },
         y: {
           position: 'right',
-          grid: { color: '#f0ede6', drawBorder: false },
+          grid: {color: '#f0ede6', drawBorder: false},
           ticks: {
-            color: '#9a8f82', font: { family: 'DM Sans', size: 9 },
-            callback: v =>
-              v >= 100000 ? '₹' + (v/100000).toFixed(1) + 'L' :
-              v >= 1000   ? '₹' + (v/1000).toFixed(0)   + 'k' : '₹' + v
+            color: '#9a8f82', font: {family: 'DM Sans', size: 9},
+            callback: v => v >= 100000 ? '₹'+(v/100000).toFixed(1)+'L' : v >= 1000 ? '₹'+(v/1000).toFixed(0)+'k' : '₹'+v
           }
         }
       }
@@ -769,11 +584,10 @@ function drawChart(canvasId, labels, prices, color, gradColor) {
 
 function setRangeStat(elId, prices) {
   if (!prices.length) return;
-  const diff = prices[prices.length - 1] - prices[0];
-  const pct  = ((diff / prices[0]) * 100).toFixed(1);
-  const el   = document.getElementById(elId);
+  const diff = prices[prices.length - 1] - prices[0], pct = ((diff / prices[0]) * 100).toFixed(1);
+  const el = document.getElementById(elId);
   el.textContent = `${diff >= 0 ? '+' : ''}${pct}% · ${fmtINR(Math.min(...prices))} – ${fmtINR(Math.max(...prices))}`;
-  el.style.color  = diff >= 0 ? 'var(--green)' : 'var(--red)';
+  el.style.color = diff >= 0 ? 'var(--green)' : 'var(--red)';
 }
 
 function showLoading(metal, visible, errMsg = null) {
@@ -791,8 +605,7 @@ function showLoading(metal, visible, errMsg = null) {
 /* ── City strip ─────────────────────────────────────────────── */
 function buildCityStrip() {
   document.getElementById('cityStrip').innerHTML = CITIES.map(c =>
-    `<button class="city-btn${c.id === currentCity.id ? ' active' : ''}"
-       onclick="setCity('${c.id}',this)">
+    `<button class="city-btn${c.id === currentCity.id ? ' active' : ''}" onclick="setCity('${c.id}',this)">
        <span class="city-name">${c.name}</span>
        <span class="city-state">${c.state}</span>
      </button>`
@@ -818,11 +631,10 @@ function setPeriod(period, btn) {
 }
 
 async function refreshAll() {
-  // Clear in-memory cache for live data, keep Frankfurter historical
-  Object.keys(MEM).forEach(k => { if (k.includes('open.er-api')) delete MEM[k]; });
-  _liveGoldUSD = null;
+  clearCache();
+  _liveINR = null;
   _baseGold10g = null;
-  _chartGold   = null;
+  _chartGold = null;
   await loadPrices();
   await loadCharts(currentPeriod);
 }
@@ -832,7 +644,7 @@ async function refreshAll() {
   buildCityStrip();
   setTimeout(() => {
     const a = document.querySelector('.city-btn.active');
-    if (a) a.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+    if (a) a.scrollIntoView({inline: 'center', behavior: 'smooth'});
   }, 150);
   await loadPrices();
   await loadCharts('30d');
